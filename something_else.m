@@ -46,10 +46,10 @@ figure; imshow(letters_2)
 row_sum = sum(letters_2, 2);
 
 % try removing rows with little content (aka not letters)
-for i = 1:size(letters_2, 1)
-   if(sum(letters_2(i,:)) < 0.10*row_sum(i))
-       letters_2(i,:) = 0;
-   end
-end
+% figure; plot(row_sum)
+% figure; plot(diff(row_sum))
 
-figure; imshow(letters_2)
+a = bwmorph(letters_2, 'close');
+figure; imshow(a)
+a = bwmorph(a, 'tophat');
+figure; imshow(a)
