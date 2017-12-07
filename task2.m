@@ -3,41 +3,46 @@ clear;
 close all;
 
 %% Iniciar compactos %%
-mask_compact1 = imread('compacto/2faf504842df_01_mask.gif'); % front
-mask_compact2 = imread('compacto/2faf504842df_09_mask.gif'); % back
-mask_compact3 = imread('compacto/2faf504842df_05_mask.gif'); % side
-mask_compact4 = imread('compacto/2faf504842df_11_mask.gif'); % other
+% mask_compact1 = imread('compacto/2faf504842df_01_mask.gif'); % front
+% mask_compact2 = imread('compacto/2faf504842df_09_mask.gif'); % back
+% mask_compact3 = imread('compacto/2faf504842df_05_mask.gif'); % side
+% mask_compact4 = imread('compacto/2faf504842df_11_mask.gif'); % other
+% 
+% mask_compact5 = imread('compacto/4b74275babf7_01_mask.gif'); % front
+% mask_compact6 = imread('compacto/4b74275babf7_09_mask.gif'); % back
+% mask_compact7 = imread('compacto/4b74275babf7_13_mask.gif'); % side
+% mask_compact8 = imread('compacto/4b74275babf7_11_mask.gif'); % other
+% 
+% mask_compact9 = imread('compacto/47ea8f25c948_01_mask.gif'); % front
+% mask_compact10 = imread('compacto/47ea8f25c948_09_mask.gif'); % back
+% mask_compact11 = imread('compacto/47ea8f25c948_05_mask.gif'); % side
+% mask_compact12 = imread('compacto/47ea8f25c948_07_mask.gif'); % other
+% 
+% mask_compact13 = imread('compacto/898339fab87a_01_mask.gif'); % front
+% mask_compact14 = imread('compacto/898339fab87a_09_mask.gif'); % back
+% mask_compact15 = imread('compacto/898339fab87a_05_mask.gif'); % side
+% mask_compact16 = imread('compacto/898339fab87a_12_mask.gif'); % other
+% 
+% mask_comp_front = {mask_compact1, mask_compact5, mask_compact9, mask_compact13};
+% mask_comp_back = {mask_compact2, mask_compact6, mask_compact10, mask_compact14};
+% mask_comp_side = {mask_compact3, mask_compact7, mask_compact11, mask_compact15};
+% mask_comp_other = {mask_compact4, mask_compact8, mask_compact12, mask_compact16};
 
-mask_compact5 = imread('compacto/4b74275babf7_01_mask.gif'); % front
-mask_compact6 = imread('compacto/4b74275babf7_09_mask.gif'); % back
-mask_compact7 = imread('compacto/4b74275babf7_13_mask.gif'); % side
-mask_compact8 = imread('compacto/4b74275babf7_11_mask.gif'); % other
+% figure;
+% subplot(4,1,1)
+% imshow(mask_compact1, [])
+% title('1')
+% subplot(4,1,2)
+% imshow(mask_compact5, [])
+% title('2')
+% subplot(4,1,3)
+% imshow(mask_compact9, [])
+% title('3')
+% subplot(4,1,4)
+% imshow(mask_compact13, [])
+% title('4')
 
-mask_compact9 = imread('compacto/47ea8f25c948_01_mask.gif'); % front
-mask_compact10 = imread('compacto/47ea8f25c948_09_mask.gif'); % back
-mask_compact11 = imread('compacto/47ea8f25c948_05_mask.gif'); % side
-mask_compact12 = imread('compacto/47ea8f25c948_07_mask.gif'); % other
-
-mask_compact13 = imread('compacto/898339fab87a_01_mask.gif'); % front
-mask_compact14 = imread('compacto/898339fab87a_09_mask.gif'); % back
-mask_compact15 = imread('compacto/898339fab87a_05_mask.gif'); % side
-mask_compact16 = imread('compacto/898339fab87a_12_mask.gif'); % other
-
-mask_comp_front = {mask_compact1, mask_compact5, mask_compact9, mask_compact13};
-mask_comp_back = {mask_compact2, mask_compact6, mask_compact10, mask_compact14};
-mask_comp_side = {mask_compact3, mask_compact7, mask_compact11, mask_compact15};
-mask_comp_other = {mask_compact4, mask_compact8, mask_compact12, mask_compact16};
-
-figure;
-imshow(mask_compact1, [])
-figure;
-imshow(mask_compact5, [])
-figure;
-imshow(mask_compact9, [])
-figure;
-imshow(mask_compact13, [])
-
-[height_comp_front, width_comp_front] = tam_max(mask_comp_front);
+% [height_comp_front, width_comp_front] = tam_max(mask_comp_front);
 % [height_comp_back, width_comp_back] = tam_max(mask_comp_back);
 % [height_comp_side, width_comp_side] = tam_max(mask_comp_side);
 % [height_comp_other, width_comp_other] = tam_max(mask_comp_other);
@@ -47,34 +52,34 @@ imshow(mask_compact13, [])
 % [med_height_comp_other, med_width_comp_other] = tam_med(mask_comp_other);
 
 %% Iniciar Pick Up %%
-% mask_pick_up1 = imread('pick_up/0ed6904e1004_01_mask.gif'); % front
-% mask_pick_up2 = imread('pick_up/0ed6904e1004_09_mask.gif'); % back
-% mask_pick_up3 = imread('pick_up/0ed6904e1004_05_mask.gif'); % side
-% mask_pick_up4 = imread('pick_up/0ed6904e1004_11_mask.gif'); % other
-% 
-% mask_pick_up5 = imread('pick_up/3cb21125f126_01_mask.gif'); % front
-% mask_pick_up6 = imread('pick_up/3cb21125f126_09_mask.gif'); % back
-% mask_pick_up7 = imread('pick_up/3cb21125f126_13_mask.gif'); % side
-% mask_pick_up8 = imread('pick_up/3cb21125f126_10_mask.gif'); % other
-% 
-% mask_pick_up9 = imread('pick_up/0795e132d090_01_mask.gif'); % front
-% mask_pick_up10 = imread('pick_up/0795e132d090_09_mask.gif'); % back
-% mask_pick_up11 = imread('pick_up/0795e132d090_05_mask.gif'); % side
-% mask_pick_up12 = imread('pick_up/0795e132d090_11_mask.gif'); % other
-% 
-% mask_pick_front = {mask_pick_up1, mask_pick_up5, mask_pick_up9};
-% mask_pick_back = {mask_pick_up2, mask_pick_up6, mask_pick_up10};
-% mask_pick_side = {mask_pick_up3, mask_pick_up7, mask_pick_up11};
-% mask_pick_other = {mask_pick_up4, mask_pick_up8, mask_pick_up12};
+mask_pick_up1 = imread('pick_up/0ed6904e1004_01_mask.gif'); % front
+mask_pick_up2 = imread('pick_up/0ed6904e1004_09_mask.gif'); % back
+mask_pick_up3 = imread('pick_up/0ed6904e1004_05_mask.gif'); % side
+mask_pick_up4 = imread('pick_up/0ed6904e1004_11_mask.gif'); % other
+
+mask_pick_up5 = imread('pick_up/3cb21125f126_01_mask.gif'); % front
+mask_pick_up6 = imread('pick_up/3cb21125f126_09_mask.gif'); % back
+mask_pick_up7 = imread('pick_up/3cb21125f126_13_mask.gif'); % side
+mask_pick_up8 = imread('pick_up/3cb21125f126_10_mask.gif'); % other
+
+mask_pick_up9 = imread('pick_up/0795e132d090_01_mask.gif'); % front
+mask_pick_up10 = imread('pick_up/0795e132d090_09_mask.gif'); % back
+mask_pick_up11 = imread('pick_up/0795e132d090_05_mask.gif'); % side
+mask_pick_up12 = imread('pick_up/0795e132d090_11_mask.gif'); % other
+
+mask_pick_front = {mask_pick_up1, mask_pick_up5, mask_pick_up9};
+mask_pick_back = {mask_pick_up2, mask_pick_up6, mask_pick_up10};
+mask_pick_side = {mask_pick_up3, mask_pick_up7, mask_pick_up11};
+mask_pick_other = {mask_pick_up4, mask_pick_up8, mask_pick_up12};
 
 % [height_pick_front, width_pick_front] = tam_max(mask_pick_front);
 % [height_pick_back, width_pick_back] = tam_max(mask_pick_back);
 % [height_pick_side, width_pick_side] = tam_max(mask_pick_side);
 % [height_pick_other, width_pick_other] = tam_max(mask_pick_other);
-% [med_height_pick_front, med_width_pick_front] = tam_med(mask_pick_front);
-% [med_height_pick_back, med_width_pick_back] = tam_med(mask_pick_back);
-% [med_height_pick_side, med_width_pick_side] = tam_med(mask_pick_side);
-% [med_height_pick_other, med_width_pick_other] = tam_med(mask_pick_other);
+[med_height_pick_front, med_width_pick_front] = tam_med(mask_pick_front);
+[med_height_pick_back, med_width_pick_back] = tam_med(mask_pick_back);
+[med_height_pick_side, med_width_pick_side] = tam_med(mask_pick_side);
+[med_height_pick_other, med_width_pick_other] = tam_med(mask_pick_other);
 
 %% Iniciar Sedan %%
 % mask_sedan1 = imread('sedan/1ae8a68a40e4_01_mask.gif'); % front
@@ -153,9 +158,9 @@ imshow(mask_compact13, [])
 
 %% TASK_2 - Classification of the vehicle in one of the four classes %%
 
-B = bwboundaries(mask_compact1, 4, 'noholes')
+% B = bwboundaries(mask_compact1, 4, 'noholes')
 
-function [height, width] = tam_max(imgs)
+function [max_h, max_w] = tam_max(imgs)
 
 [x1,y1] = size(imgs{1});
 c = 0;
@@ -169,27 +174,24 @@ min_top = y1;
 max_bottom = 0;
 min_left = x1;
 max_right = 0;
-
+max_h = 0;
+max_w = 0;
 for j = 1:size(imgs,2)
     for i = 1:x1
         img = imgs{j};
         total_line = sum(img(i,:));
         if (total_line ~= 0) && (c == 0)
             top_line = i;
-            top_line
             c = 1;
-            if (top_line < min_top)
-                min_top = top_line;
-            end
         end
         if (total_line == 0) && (c ~= 0)
             bottom_line = i;
-            bottom_line
             c = 0;
-            if (bottom_line > max_bottom)
-                max_bottom = bottom_line;
-            end 
         end
+    end
+    height = abs(top_line - bottom_line);
+    if (height > max_h)
+        max_h = height;
     end
     c = 0;
     for i = 1:y1
@@ -213,9 +215,11 @@ for j = 1:size(imgs,2)
     if(max_right == 0) 
         max_right = x1; % pick up that goes beyond the image length
     end
+    width = abs(left_line - right_line);
+    if (width > max_w)
+        max_w = width;
+    end
 end
-height = max_bottom - min_top;
-width = max_right - min_left;
 return
 end
 
@@ -267,11 +271,11 @@ for j = 1:size(imgs,2)
             c = 0;
         end
     end
+    left_tot = left_tot + left_line;
+    right_tot = right_tot + right_line;
     if(right_tot == 0) 
         right_tot = x1; % pick up that goes beyond the image length
     end
-    left_tot = left_tot + left_line;
-    right_tot = right_tot + right_line;
 end
 
 med_top = top_tot / size(imgs,2);
