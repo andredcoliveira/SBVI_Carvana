@@ -102,9 +102,32 @@ title('Rows 1ª Derivada');
 figure; plot(abs(diff(diff(sum_rows))))
 title('Rows 2ª Derivada');
 
-pks = findpeaks(abs(diff(diff(sum_rows))));
-x1 = max(pks)
-x2 = max(pks(pks<x1))
+[x,y] = findpeaks(abs(diff(diff(sum_rows))));
+max = 0;
+for i=1:size(x,2)
+    aux = x(i);
+    if(aux > max)
+        max = aux;
+        index = i
+    end
+end
+x1 = y(index)
+x(index) = 0;
+max = 0;
+for j=1:20
+    k = index + j;
+    x(k) = 0;
+    k = index - j;
+    x(k) = 0;
+end
+for i=1:size(x,2)
+    aux = x(i);
+    if(aux > max)
+        max = aux;
+        index = i
+    end
+end
+x2 = y(index)
 width = abs(x1-x2)
 
 
