@@ -16,6 +16,8 @@ cars = startup;
 
 %% Efficiency
 
+gndtrus = getGroundTruths;
+
 similarity = zeros(size(cars,2), size(cars{1},2));
 for i = 1:size(cars,2)
     for j = 1:size(cars{1},2)
