@@ -274,14 +274,14 @@ for i = 1:size(cars,2)
         
         
 %         segIm = imbinarize(car_cropped);   %dev
-        segIm = im2bw(car_cropped, 0.01);   %dev
+%         segIm = im2bw(car_cropped, 0.01);   %dev
 %         figure; imshow(segIm, [])   %dev
 
         %% Efficiency
 
         gndtru = gndtrus{i}{j};
 
-        similarity(i,j) = 2*nnz(segIm&gndtru)/(nnz(segIm) + nnz(gndtru));
+        similarity(i,j) = 2*nnz(car_cropped&gndtru)/(nnz(car_cropped) + nnz(gndtru));
 
     end
 end
