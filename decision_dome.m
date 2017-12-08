@@ -1,4 +1,4 @@
-function dome = second_dome(mask_side)
+function dome = decision_dome(mask_side)
     aux = 0;
     left_dome = 0;
     right_dome = 0;

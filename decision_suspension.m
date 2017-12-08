@@ -1,4 +1,4 @@
-function decision = first_susp(mask_side, min_susp_pick_up)
+function decision = decision_suspension(mask_side, min_susp_pick_up)
     aux = 0;
     new_bot = 0;
     sum_susp = 0;

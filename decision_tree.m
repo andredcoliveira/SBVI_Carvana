@@ -14,15 +14,15 @@ mask_pick_side = {mask_pick_up3, mask_pick_up7, mask_pick_up11};
 
 % [max_susp_pick_up, min_susp_pick_up] = suspension(mask_pick_side);
 
-% first_susp
-% suspension_pick_up1 = first_susp(mask_pick_up3, min_susp_pick_up);
-% suspension_pick_up2 = first_susp(mask_pick_up7, min_susp_pick_up);
-% suspension_pick_up3 = first_susp(mask_pick_up11, min_susp_pick_up);
+% decision_suspension
+% suspension_pick_up1 = decision_suspension(mask_pick_up3, min_susp_pick_up);
+% suspension_pick_up2 = decision_suspension(mask_pick_up7, min_susp_pick_up);
+% suspension_pick_up3 = decision_suspension(mask_pick_up11, min_susp_pick_up);
 
-% second_dome
-% dome_pick_up1 = second_dome(mask_pick_up3);
-% dome_pick_up2 = second_dome(mask_pick_up7);
-% dome_pick_up3 = second_dome(mask_pick_up11);
+% decision_dome
+% dome_pick_up1 = decision_dome(mask_pick_up3);
+% dome_pick_up2 = decision_dome(mask_pick_up7);
+% dome_pick_up3 = decision_dome(mask_pick_up11);
 
 % area
 % white_area_pick_up_1 = area(mask_pick_up3);
@@ -42,17 +42,17 @@ mask_comp_side = {mask_compact3, mask_compact7, mask_compact11, mask_compact15};
 
 % [max_susp_compact, min_susp_compact] = suspension(mask_comp_side);
 
-% first_susp
-% suspension_compact1 = first_susp(mask_compact3, min_susp_pick_up);
-% suspension_compact2 = first_susp(mask_compact7, min_susp_pick_up);
-% suspension_compact3 = first_susp(mask_compact11, min_susp_pick_up);
-% suspension_compact4 = first_susp(mask_compact15, min_susp_pick_up);
+% decision_suspension
+% suspension_compact1 = decision_suspension(mask_compact3, min_susp_pick_up);
+% suspension_compact2 = decision_suspension(mask_compact7, min_susp_pick_up);
+% suspension_compact3 = decision_suspension(mask_compact11, min_susp_pick_up);
+% suspension_compact4 = decision_suspension(mask_compact15, min_susp_pick_up);
 
-% second_dome
-% dome_compact1 = second_dome(mask_compact3);
-% dome_compact2 = second_dome(mask_compact7);
-% dome_compact3 = second_dome(mask_compact11);
-% dome_compact4 = second_dome(mask_compact15);
+% decision_dome
+% dome_compact1 = decision_dome(mask_compact3);
+% dome_compact2 = decision_dome(mask_compact7);
+% dome_compact3 = decision_dome(mask_compact11);
+% dome_compact4 = decision_dome(mask_compact15);
 
 % area
 % white_area_compact1 = area(mask_compact3);
@@ -76,19 +76,19 @@ mask_sed_side = {mask_sedan3, mask_sedan7, mask_sedan11, mask_sedan15, mask_seda
 
 % [max_susp_sedan, min_susp_sedan] = suspension(mask_sed_side);
 
-% first_susp
-% suspension_sedan1 = first_susp(mask_sedan3, min_susp_pick_up);
-% suspension_sedan2 = first_susp(mask_sedan7, min_susp_pick_up);
-% suspension_sedan3 = first_susp(mask_sedan11, min_susp_pick_up);
-% suspension_sedan4 = first_susp(mask_sedan15, min_susp_pick_up);
-% suspension_sedan5 = first_susp(mask_sedan19, min_susp_pick_up);
+% decision_suspension
+% suspension_sedan1 = decision_suspension(mask_sedan3, min_susp_pick_up);
+% suspension_sedan2 = decision_suspension(mask_sedan7, min_susp_pick_up);
+% suspension_sedan3 = decision_suspension(mask_sedan11, min_susp_pick_up);
+% suspension_sedan4 = decision_suspension(mask_sedan15, min_susp_pick_up);
+% suspension_sedan5 = decision_suspension(mask_sedan19, min_susp_pick_up);
 
-% second_dome
-% dome_sedan1 = second_dome(mask_sedan3);
-% dome_sedan2 = second_dome(mask_sedan7);
-% dome_sedan3 = second_dome(mask_sedan11);
-% dome_sedan4 = second_dome(mask_sedan15);
-% dome_sedan5 = second_dome(mask_sedan19);
+% decision_dome
+% dome_sedan1 = decision_dome(mask_sedan3);
+% dome_sedan2 = decision_dome(mask_sedan7);
+% dome_sedan3 = decision_dome(mask_sedan11);
+% dome_sedan4 = decision_dome(mask_sedan15);
+% dome_sedan5 = decision_dome(mask_sedan19);
 
 % area
 % white_area_sedan1 = area(mask_sedan3);
@@ -113,17 +113,17 @@ mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 
 % [max_susp_suv, min_susp_suv] = suspension(mask_suv_side);
 
-% first_susp
-% suspension_SUV1 = first_susp(mask_SUV3, min_susp_pick_up);
-% suspension_SUV2 = first_susp(mask_SUV7, min_susp_pick_up);
-% suspension_SUV3 = first_susp(mask_SUV11, min_susp_pick_up);
-% suspension_SUV4 = first_susp(mask_SUV15, min_susp_pick_up);
+% decision_suspension
+% suspension_SUV1 = decision_suspension(mask_SUV3, min_susp_pick_up);
+% suspension_SUV2 = decision_suspension(mask_SUV7, min_susp_pick_up);
+% suspension_SUV3 = decision_suspension(mask_SUV11, min_susp_pick_up);
+% suspension_SUV4 = decision_suspension(mask_SUV15, min_susp_pick_up);
 
-% second_dome
-% dome_SUV1 = second_dome(mask_SUV3);
-% dome_SUV2 = second_dome(mask_SUV7);
-% dome_SUV3 = second_dome(mask_SUV11);
-% dome_SUV4 = second_dome(mask_SUV15);
+% decision_dome
+% dome_SUV1 = decision_dome(mask_SUV3);
+% dome_SUV2 = decision_dome(mask_SUV7);
+% dome_SUV3 = decision_dome(mask_SUV11);
+% dome_SUV4 = decision_dome(mask_SUV15);
 
 % area
 % white_area_suv1 = area(mask_SUV3);
@@ -134,30 +134,55 @@ mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 %% Testing %%
 
 mask_all_side = {mask_pick_side, mask_comp_side, mask_sed_side, mask_suv_side};
-class = 3;
-img = 1;
+class = 1;
+img = 3;
 mask = mask_all_side{class}{img};
 
-figure; imshow(mask, [])
+% fixed values %
+class1 = 3;
+class2 = 4;
+[max_area_sed, max_axis_sed, max_formula_sed, max_box_sed] = references(mask_all_side, class1);
+[max_area_suv, max_axis_suv, max_formula_suv, max_box_suv] = references(mask_all_side, class2);
 
+% figure; imshow(mask, [])
+%-------------------------------------------------------------------------%
 % [max_height, max_width] = tam_max(mask_all_side{class});
 % [min_height, min_width] = tam_min(mask_all_side{class});
 % [height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask_all_side{class})
-
 % [max_susp_suv, min_susp] = suspension(mask_all_side{class});
+%-------------------------------------------------------------------------%
 
-% first_susp
-% suspension = first_susp(mask, min_susp_pick_up);
+% [max_susp_pick_up, min_susp_pick_up] = suspension(mask_pick_side);
+% suspension = decision_suspension(mask, min_susp_pick_up);
+%-------------------------------------------------------------------------%
 
-% second_dome
-% dome = second_dome(mask);
+% dome = decision_dome(mask);
+%-------------------------------------------------------------------------%
 
-[height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask);
+% [height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask);
 % perimeter = 2*height + 2*width;
 % white_area = area(mask)*area(mask) / perimeter;
 % area = area(mask);
 % axis = height / width;
-reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
-axis_reg = reg.BoundingBox(4) / reg.BoundingBox(3);
+%-------------------------------------------------------------------------%
 
-formula = reg.Perimeter*reg.Perimeter / reg.Area
+reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+formula = reg.Perimeter*reg.Perimeter / reg.Area;
+box = reg.BoundingBox(4) * reg.BoundingBox(3);
+
+%-------------------------------------------------------------------------%
+
+if (box > max_box_sed*1.05)
+    if (formula > max_formula_suv*1.2)
+        text = sprintf('Pick-Up')
+    else
+        text = sprintf('SUV')
+    end
+else
+    if (axis > max_axis_sed*1.05)
+        text = sprintf('Compacto')
+    else
+        text = sprintf('Sedan')
+    end
+end
