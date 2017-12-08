@@ -6,9 +6,6 @@ clc;  %commands
 clear;  %workspace
 
 cars = startup; % get every car photo
-gndtrus = getGroundTruths; % get every ground truth
-
-similarity = zeros(size(cars,2), size(cars{1},2) + 1);
 
 % figure; imshow(cars{1}{1})  % cars -> comp_front -> compact1
 % type_view = size(cars,2)  % cars rows (16)
@@ -45,14 +42,26 @@ lw_inf = [14 37];
 % for i = 1:size(cars,2)
 %     for j = 1:size(cars{i},2)
 % for x = 1:2
-        i = 3; j = 1;  %dev
+%         i = 3; j = 1;  %dev
         
-        car = cars{i}{j};
-        figure; imshow(car)  %dev
-        title('original');  %dev
-            
+%         if( x == 1)
+            car = cars{i}{j};
+%         end
+        
+%         figure; imshow(car)  %dev
+%         title('original');  %dev
+        
+%         car = medfilt2(car, [5 5]);
         car_sides = imclose(car, strel('line', 120, 0));
+%         car_sides = car;
+          
+%         car_sides = imclose(car, strel('line', 30, 90));
+%         car_sides = imdilate(car, strel('line', 15, 0));
         car_sides = imgaussfilt(car_sides, 1);
+
+
+%         figure; imshow(car_sides)  %dev
+%         title('car sides');  %dev
         
         % left / write coordinates
         
@@ -60,10 +69,22 @@ lw_inf = [14 37];
         for k = 1:size(car_sides,2)
             sum_cols(k) = sum(car_sides(:,k));
         end
+%         figure; plot(sum_cols);  %dev
+%         title('original sum cols');  %dev
+%         figure; plot(diff(sum_cols));  %dev
+%         title('original diff sum cols');  %dev
         
         
         [maxima, max_x] = findpeaks(diff(sum_cols));
         [minima, min_x] = findpeaks(diff(-sum_cols));
+%         figure; subplot(2,1,1); plot(maxima)  %dev
+%         title('maxima')  %dev
+%         subplot(2,1,2); plot(max_x)  %dev
+%         title('max_x')  %dev
+%         figure; subplot(2,1,1); plot(minima)  %dev
+%         title('minima')  %dev
+%         subplot(2,1,2); plot(min_x)  %dev
+%         title('min_x')  %dev
         
         c1 = 0;
         c2 = 0;
@@ -98,6 +119,15 @@ lw_inf = [14 37];
                 tmp_min_x(c2) = min_x(k);
             end
         end
+        
+%         figure; subplot(2,1,1); plot(tmp_max)  %dev
+%         title('tmp max')  %dev
+%         subplot(2,1,2); plot(tmp_max_x)  %dev
+%         title('tmp max x')  %dev
+%         figure; subplot(2,1,1); plot(tmp_min)  %dev
+%         title('tmp min')  %dev
+%         subplot(2,1,2); plot(tmp_min_x)  %dev
+%         title('tmp min x')  %dev
         
         % apagar máximos precedidos de mínimos cuja distância perfaz a
         % largura de uma letra
@@ -138,6 +168,14 @@ lw_inf = [14 37];
             end
         end
         
+%         figure; subplot(2,1,1); plot(maxima)  %dev
+%         subplot(2,1,2); plot(max_x)  %dev
+%         title('decisive max');  %dev
+        
+%         figure; subplot(2,1,1); plot(minima)  %dev
+%         subplot(2,1,2); plot(min_x)  %dev
+%         title('decisive min');  %dev
+        
         % left
         if(max_x(1) < min_x(1)); left = max_x(1); else; left = min_x(1); end
         
@@ -151,7 +189,14 @@ lw_inf = [14 37];
         smoothed = adapthisteq(car);
         smoothed = imgaussfilt(smoothed, 2);
         smoothed = imclose(smoothed, strel('line', 150, 0));
+%         smoothed = imdilate(smoothed, strel('disk', 35));
+%         figure; imshow(smoothed)  %dev
+%         title('top / bottom')  %dev
+%         smoothed = imerode(smoothed, strel('disk', 5));
+%         smoothed = adapthisteq(smoothed);
         smoothed = imgaussfilt(smoothed, 7);
+%         figure; imshow(smoothed)  %dev
+%         title('open')  %dev
 
         sum_cols = zeros(1, size(smoothed,1));
 
@@ -159,8 +204,23 @@ lw_inf = [14 37];
             sum_cols(k) = sum(smoothed(k,:));
         end
 
+%         figure; plot(sum_cols)  %dev
+%         title('sum cols');  %dev
+%         figure; plot(abs(diff(sum_cols)))  %dev
+%         title('Cols 1ª Derivada');  %dev
+%         figure; plot(abs(diff(diff(sum_cols))))
+%         title('Cols 2ª Derivada');
+
         [maxima, max_y] = findpeaks(diff(sum_cols));
         [minima, min_y] = findpeaks(diff(-sum_cols));
+%         figure; subplot(2,1,1); plot(maxima)  %dev
+%         title('maxima')  %dev
+%         subplot(2,1,2); plot(max_y)  %dev
+%         title('max y')  %dev
+%         figure; subplot(2,1,1); plot(minima)  %dev
+%         title('minima')  %dev
+%         subplot(2,1,2); plot(min_y)  %dev
+%         title('min y')  %dev
         
         c1 = 0;
         c2 = 0;
@@ -196,80 +256,42 @@ lw_inf = [14 37];
             end
         end
         
+%         figure; subplot(2,1,1); plot(tmp_max)  %dev
+%         title('tmp max')  %dev
+%         subplot(2,1,2); plot(tmp_max_y)  %dev
+%         title('tmp max y')  %dev
+%         figure; subplot(2,1,1); plot(tmp_min)  %dev
+%         title('tmp min')  %dev
+%         subplot(2,1,2); plot(tmp_min_y)  %dev
+%         title('tmp min y')  %dev
+        
         % top
         if(tmp_max_y(1) < tmp_min_y(1)); top = tmp_max_y(1); else; top = tmp_min_y(1); end
         
         % bottom
         if(tmp_max_y(length(tmp_max_y)) < tmp_min_y(length(tmp_min_y))); bottom = tmp_max_y(length(tmp_max_y)); else; bottom = tmp_min_y(length(tmp_min_y)); end
 
+%         xtolerance = 0.02;
+%         ytolerance = 0.10;
         tolerance = [0.10 0.025 0.15 0.05];
         top = top - top*tolerance(1);
         right = right + right*tolerance(2);
         bottom = bottom + bottom*tolerance(3);
         left = left - left*tolerance(4);
-        
-        car_cropped = zeros(size(car,1), size(car,2));
-        for w = 1:size(car,1)
-            for v = 1:size(car,2)
-                if(~(w < top || w > bottom || v < left || v > right))
-                    car_cropped(w,v) = car(w,v);
-                else
-                    car_cropped(w,v) = 0.5;
-                end
-            end
-        end
-        
-%         car_cropped = imcrop(car, [left top right-left bottom-top]);
-        figure; imshow(car_cropped)   %dev
-        title('before processing');   %dev
-
-        %% getting it nice and clean
-
-        smoothed_bounds = imgaussfilt(car_cropped, 20);
-%         car_cropped = imopen(car_cropped, strel('disk', 5));
-
-%         for w = 1:size(car,1)
-%             for v = 1:size(car,2)
-%                 if((w < top || w > bottom || v < left || v > right))
-%                     car_cropped(w,v) = smoothed_bounds(w,v);
-%                 end
-%             end
-%         end
-        
-%         car_cropped = imfilter(car_cropped, fspecial('log', 5, 0.2));
-        car_cropped = edge(car_cropped, 'Canny', 0.05, 1);
-        
-        for w = 1:size(car_cropped, 1)
-            for v = 1:size(car_cropped , 2)
-                if(abs(w-top) < 3 || abs(v-right) < 3 || abs(w-bottom) < 3 || abs(v-left) < 3)
-                    car_cropped(w,v) = 0;
-                end
-            end
-        end
-        
-        figure; imshow(car_cropped)   %dev
-        title('mid processing 1');   %dev
-        
-        car_cropped = bwmorph(car_cropped, 'close');
-
-        figure; imshow(car_cropped)   %dev
-        title('mid processing 2');   %dev
-        
-        
-        
-%         segIm = imbinarize(car_cropped);   %dev
-        segIm = im2bw(car_cropped, 0.01);   %dev
-%         figure; imshow(segIm, [])   %dev
-
-        %% Efficiency
-
-        gndtru = gndtrus{i}{j};
-
-        similarity(i,j) = 2*nnz(segIm&gndtru)/(nnz(segIm) + nnz(gndtru));
-
+        car = imcrop(car, [left top right-left bottom-top]);
+        figure; imshow(car)
 %     end
 % end
 
-sim_values = similarity(similarity ~= 0);
 
-average_efficiency = mean(sim_values)
+%% Efficiency
+
+% gndtrus = getGroundTruths;
+% 
+% similarity = zeros(size(cars,2), size(cars{1},2));
+% for i = 1:size(cars,2)
+%     for j = 1:size(cars{1},2)
+%         similarity(i,j) = 2*nnz(segIm&grndTruth)/(nnz(segIm) + nnz(grndTruth));
+% end
+%     end
+% end
