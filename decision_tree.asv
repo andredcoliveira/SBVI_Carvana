@@ -134,7 +134,7 @@ mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 %% Testing %%
 
 mask_all_side = {mask_pick_side, mask_comp_side, mask_sed_side, mask_suv_side};
-class = 3;
+class = 1;
 img = 1;
 mask = mask_all_side{class}{img};
 
@@ -144,6 +144,9 @@ figure; imshow(mask, [])
 % [min_height, min_width] = tam_min(mask_all_side{class});
 % [height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask_all_side{class})
 
+[height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask);
+perimeter = 2*height + 2*width;
+
 % [max_susp_suv, min_susp] = suspension(mask_all_side{class});
 
 % first_susp
@@ -152,12 +155,8 @@ figure; imshow(mask, [])
 % second_dome
 % dome = second_dome(mask);
 
-[height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask);
-% perimeter = 2*height + 2*width;
-% white_area = area(mask)*area(mask) / perimeter;
-% area = area(mask);
-% axis = height / width;
-reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
-axis_reg = reg.BoundingBox(4) / reg.BoundingBox(3);
+% area
+white_area = area(mask)*area(mask) / perimeter;
+area = area(mask);
+reg = regionprops(mask,'area','boundingbox','perimeter', 'orientati);
 
-formula = reg.Perimeter*reg.Perimeter / reg.Area

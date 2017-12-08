@@ -1,4 +1,4 @@
-function [max_susp, min_susp] = withdrawal(mask_side)
+function [max_susp, min_susp] = suspension(mask_side)
     aux = 0;
     new_bot = 0;
     sum_susp = 0;
