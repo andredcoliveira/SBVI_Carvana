@@ -20,11 +20,11 @@ I = carros(:,:,1);
 figure; imshow(I)
 title('Original');
 
-%% Smoothing %%
+%% Smoothing
 smoothed = medfilt2(I, [5 5]);
 % smoothed = imgaussfilt(I, 2);
 
-%% Cleaning letters %%
+%% Cleaning letters
 smoothed_2 = imclose(smoothed, strel('line', 130, 0));
 figure; imshow(smoothed_2)
 title('imclose')
@@ -44,7 +44,7 @@ title('im2bw')
 
 final = smoothed_2;
 
-%% Calculate the derivative - Width %%
+%% Calculate the derivative - Width
 sum_rows = zeros(1, size(final,2));
 for i = 1:size(final,2)
 
@@ -66,7 +66,7 @@ title('Rows 2ª Derivada');
 
 [left right] = borders(second_diff_rows);
 
-%% Calculate the derivative - Height %%
+%% Calculate the derivative - Height
 
 sum_cols = zeros(1, size(final,1));
 for i = 1:size(final,1)
@@ -88,7 +88,7 @@ title('Cols 2ª Derivada');
 
 [top bottom] = borders(second_diff_cols);
 
-%% Function that calculate length (height and width) %%
+%% Function that calculate length (height and width)
 function [first second] = borders(second_diff)
     [x,y] = findpeaks(second_diff);
     max = 0;
