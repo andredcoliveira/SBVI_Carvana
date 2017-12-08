@@ -42,14 +42,14 @@ lw_inf = [14 37];
 
 %% Boundaries
 
-% for i = 1:size(cars,2)
-%     for j = 1:size(cars{i},2)
+for i = 1:size(cars,2)
+    for j = 1:size(cars{i},2)
 % for x = 1:2
-        i = 3; j = 1;  %dev
+%         i = 3; j = 1;  %dev
         
         car = cars{i}{j};
-        figure; imshow(car)  %dev
-        title('original');  %dev
+%         figure; imshow(car)  %dev
+%         title('original');  %dev
             
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
@@ -220,8 +220,8 @@ lw_inf = [14 37];
         end
         
 %         car_cropped = imcrop(car, [left top right-left bottom-top]);
-        figure; imshow(car_cropped)   %dev
-        title('before processing');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('before processing');   %dev
 
         %% getting it nice and clean
 
@@ -247,13 +247,29 @@ lw_inf = [14 37];
             end
         end
         
-        figure; imshow(car_cropped)   %dev
-        title('mid processing 1');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('mid processing 1');   %dev
         
-        car_cropped = bwmorph(car_cropped, 'close');
-
-        figure; imshow(car_cropped)   %dev
-        title('mid processing 2');   %dev
+        car_cropped = bwmorph(car_cropped, 'thin');
+%         figure; imshow(car_cropped)   %dev
+%         title('thin');   %dev
+        
+%         car_cropped = imopen(car_cropped, strel('line', 20, 90));
+%         figure; imshow(car_cropped)   %dev
+%         title('mid processing 2');   %dev
+        
+%         car_cropped = bwmorph(car_cropped, 'close');
+        car_cropped = imclose(car_cropped, strel('disk', 10));
+%         figure; imshow(car_cropped)   %dev
+%         title('mid processing 2');   %dev
+        
+        car_cropped = imfill(car_cropped, 'holes');
+%         figure; imshow(car_cropped)   %dev
+%         title('filled');   %dev
+        
+        car_cropped = bwmorph(car_cropped, 'open');
+%         figure; imshow(car_cropped)   %dev
+%         title('mid processing 2');   %dev
         
         
         
@@ -267,8 +283,8 @@ lw_inf = [14 37];
 
         similarity(i,j) = 2*nnz(segIm&gndtru)/(nnz(segIm) + nnz(gndtru));
 
-%     end
-% end
+    end
+end
 
 sim_values = similarity(similarity ~= 0);
 
