@@ -44,8 +44,7 @@ lw_inf = [14 37];
 
 for i = 1:size(cars,2)
     for j = 1:size(cars{i},2)
-% for x = 1:2
-%         i = 2; j = 2;  %dev
+%         i = 13; j = 4;  %dev
         
         car = cars{i}{j};
 %         figure; imshow(car)  %dev
@@ -239,7 +238,6 @@ for i = 1:size(cars,2)
         
 %         car_cropped = imfilter(car_cropped, fspecial('log', 5, 0.2));
 
-        % testar com thresholds mais baixos
         
         testcar = car_cropped;
         
@@ -300,8 +298,12 @@ for i = 1:size(cars,2)
                 % Call Bresenham's algorithm
                 [x, y] = bresenham(lines(w).point1(1), lines(w).point1(2), ...
                                    lines(w).point2(1), lines(w).point2(2));
-
-                car_cropped(y, x) = 0;
+                
+                for z = 1:length(x)
+                    if(x(z) < top*1.2 && x(z) < bottom*0.8 && y(z) > left*1.2 && y(z) < right*0.8)
+                        car_cropped(y, x) = 0;
+                    end
+                end
             end
             lines = old_lines;
         end 
@@ -322,7 +324,7 @@ for i = 1:size(cars,2)
 %         figure; imshow(car_cropped)   %dev
 %         title('fill');   %dev
         
-        car_cropped = imopen(car_cropped, strel('disk', 30));
+        car_cropped = imopen(car_cropped, strel('disk', 15));
 %         figure; imshow(car_cropped)   %dev
 %         title('open');   %dev
         
