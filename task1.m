@@ -42,14 +42,14 @@ lw_inf = [14 37];
 
 %% Boundaries
 
-% for i = 1:size(cars,2)
-%     for j = 1:size(cars{i},2)
+for i = 1:size(cars,2)
+    for j = 1:size(cars{i},2)
 % for x = 1:2
-        i = 2; j = 2;  %dev
+%         i = 2; j = 2;  %dev
         
         car = cars{i}{j};
-        figure; imshow(car)  %dev
-        title('original');  %dev
+%         figure; imshow(car)  %dev
+%         title('original');  %dev
             
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
@@ -221,8 +221,8 @@ lw_inf = [14 37];
         
 %         car_cropped = imcrop(car, [left top right-left bottom-top]);
 %         car_cropped = imopen(car_cropped, strel('line', 20, 0));
-        figure; imshow(car_cropped)   %dev
-        title('before processing');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('before processing');   %dev
 
         %% getting it nice and clean
 
@@ -242,80 +242,89 @@ lw_inf = [14 37];
         % testar com thresholds mais baixos
         
         testcar = car_cropped;
-        for k = 1:3
-            car_cropped = edge(testcar, 'Canny', 0.025*k, 1);
-            figure; imshow(car_cropped)
-            title(['Canny ' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'horizontal');
-            figure; imshow(car_cropped)
-            title(['Sobel horizontal' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'vertical');
-            figure; imshow(car_cropped)
-            title(['Sobel vertical' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'both');
-            figure; imshow(car_cropped)
-            title(['Sobel both' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'log', 0.025*k, 1);
-            figure; imshow(car_cropped)
-            title(['log ' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'horizontal');
-            figure; imshow(car_cropped)
-            title(['Prewitt horizontal' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'vertical');
-            figure; imshow(car_cropped)
-            title(['Prewitt vertical' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'both');
-            figure; imshow(car_cropped)
-            title(['Prewitt both' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'Roberts', 0.025*k);
-            figure; imshow(car_cropped)
-            title(['Roberts ' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'zerocross', 0.025*k, [0 2-k 0, 2-k 0 2-k, 0 2-k 0]);
-            figure; imshow(car_cropped)
-            title(['zerocross ' num2str(k, '%2d')]);   %dev
-            
-            car_cropped = edge(testcar, 'approxcanny', 0.025*k);
-            figure; imshow(car_cropped)
-            title(['approxcanny ' num2str(k, '%2d')]);   %dev
-        end
-
+        
+        car_cropped = edge(testcar, 'Canny', 0.08, 0.7);
+%         figure; imshow(car_cropped)
+%         title('Canny 0.08 0.7');   %dev
         
         for w = 1:size(car_cropped, 1)
-            for v = 1:size(car_cropped , 2)
+            for v = 1:size(car_cropped, 2)
                 if(abs(w-top) < 3 || abs(v-right) < 3 || abs(w-bottom) < 3 || abs(v-left) < 3)
                     car_cropped(w,v) = 0;
                 end
             end
         end
         
-        figure; imshow(car_cropped)   %dev
-        title('crop');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('crop');   %dev
+        
+        for w = 1:2
+            if(w == 1)
+                thetas = [-40:-34 34:40 -26:-18 18:26];
+            elseif(w == 2)
+                thetas = -3:3;
+            end
+
+            [H, T, R] = hough(car_cropped, 'Theta', thetas);
+    %             figure; imshow(H,[],'XData',T,'YData',R);
+    %             xlabel('\theta'), ylabel('\rho');
+    %             axis on, axis normal, hold on;
+            P = houghpeaks(H, 10);
+            lines = houghlines(car_cropped, T, R, P, 'FillGap', 3, 'MinLength', 50);
+
+%             figure, imshow(car_cropped), hold on
+            max_len = 0;
+            for k = 1:length(lines)
+               xy = [lines(k).point1; lines(k).point2];
+%                plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+
+               % Plot beginnings and ends of lines
+%                plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+%                plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+
+               % Determine the endpoints of the longest line segment
+               len = norm(lines(k).point1 - lines(k).point2);
+               if ( len > max_len)
+                  max_len = len;
+                  xy_long = xy;
+               end
+            end
+    %         plot(xy_long(:,1),xy_long(:,2),'LineWidth',2,'Color','cyan');
+            if(w == 1)
+                old_lines = lines;
+            end
+        end
+
+        for v = 1:2
+            for w = 1:length(lines)
+                % Call Bresenham's algorithm
+                [x, y] = bresenham(lines(w).point1(1), lines(w).point1(2), ...
+                                   lines(w).point2(1), lines(w).point2(2));
+
+                car_cropped(y, x) = 0;
+            end
+            lines = old_lines;
+        end 
+
+%         figure; imshow(car_cropped)   %dev
+%         title('deleted lines');   %dev
         
         car_cropped = bwmorph(car_cropped, 'thin');
-        figure; imshow(car_cropped)   %dev
-        title('thin');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('thin');   %dev
         
 %         car_cropped = bwmorph(car_cropped, 'close');
         car_cropped = imclose(car_cropped, strel('disk', 10));
-        figure; imshow(car_cropped)   %dev
-        title('close');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('close');   %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-        figure; imshow(car_cropped)   %dev
-        title('fill');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('fill');   %dev
         
         car_cropped = imopen(car_cropped, strel('disk', 30));
-        figure; imshow(car_cropped)   %dev
-        title('open');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('open');   %dev
         
         
 %         for k = 1:5
@@ -344,11 +353,11 @@ lw_inf = [14 37];
         %% Efficiency
 
         gndtru = gndtrus{i}{j};
-
+        
         similarity(i,j) = 2*nnz(car_cropped&gndtru)/(nnz(car_cropped) + nnz(gndtru));
 
-%     end
-% end
+    end
+end
 
 sim_values = similarity(similarity ~= 0);
 
