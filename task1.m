@@ -42,14 +42,14 @@ lw_inf = [14 37];
 
 %% Boundaries
 
-for i = 1:size(cars,2)
-    for j = 1:size(cars{i},2)
+% for i = 1:size(cars,2)
+%     for j = 1:size(cars{i},2)
 % for x = 1:2
-%         i = 3; j = 1;  %dev
+        i = 2; j = 2;  %dev
         
         car = cars{i}{j};
-%         figure; imshow(car)  %dev
-%         title('original');  %dev
+        figure; imshow(car)  %dev
+        title('original');  %dev
             
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
@@ -165,7 +165,7 @@ for i = 1:size(cars,2)
         c1 = 0;
         c2 = 0;
         for k = 1:min(size(maxima,2), size(minima,2))
-            if((abs(maxima(k)) < 0.30*max(maxima)) || (max_y(k) < 0.10*size(car,1)) || (max_y(k) > 0.90*size(car,1)))
+            if((abs(maxima(k)) < 0.20*max(maxima)) || (max_y(k) < 0.10*size(car,1)) || (max_y(k) > 0.90*size(car,1)))
                 maxima(k) = 0;
             else
                 c1 = c1 + 1;
@@ -202,7 +202,7 @@ for i = 1:size(cars,2)
         % bottom
         if(tmp_max_y(length(tmp_max_y)) < tmp_min_y(length(tmp_min_y))); bottom = tmp_max_y(length(tmp_max_y)); else; bottom = tmp_min_y(length(tmp_min_y)); end
 
-        tolerance = [0.10 0.025 0.15 0.05];
+        tolerance = [0.15 0.025 0.15 0.05];
         top = top - top*tolerance(1);
         right = right + right*tolerance(2);
         bottom = bottom + bottom*tolerance(3);
@@ -220,12 +220,13 @@ for i = 1:size(cars,2)
         end
         
 %         car_cropped = imcrop(car, [left top right-left bottom-top]);
-%         figure; imshow(car_cropped)   %dev
-%         title('before processing');   %dev
+%         car_cropped = imopen(car_cropped, strel('line', 20, 0));
+        figure; imshow(car_cropped)   %dev
+        title('before processing');   %dev
 
         %% getting it nice and clean
 
-        smoothed_bounds = imgaussfilt(car_cropped, 20);
+%         smoothed_bounds = imgaussfilt(car_cropped, 20);
 %         car_cropped = imopen(car_cropped, strel('disk', 5));
 
 %         for w = 1:size(car,1)
@@ -237,7 +238,56 @@ for i = 1:size(cars,2)
 %         end
         
 %         car_cropped = imfilter(car_cropped, fspecial('log', 5, 0.2));
-        car_cropped = edge(car_cropped, 'Canny', 0.05, 1);
+
+        % testar com thresholds mais baixos
+        
+        testcar = car_cropped;
+        for k = 1:3
+            car_cropped = edge(testcar, 'Canny', 0.025*k, 1);
+            figure; imshow(car_cropped)
+            title(['Canny ' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'horizontal');
+            figure; imshow(car_cropped)
+            title(['Sobel horizontal' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'vertical');
+            figure; imshow(car_cropped)
+            title(['Sobel vertical' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Sobel', 0.025*k, 'both');
+            figure; imshow(car_cropped)
+            title(['Sobel both' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'log', 0.025*k, 1);
+            figure; imshow(car_cropped)
+            title(['log ' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'horizontal');
+            figure; imshow(car_cropped)
+            title(['Prewitt horizontal' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'vertical');
+            figure; imshow(car_cropped)
+            title(['Prewitt vertical' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Prewitt', 0.025*k, 'both');
+            figure; imshow(car_cropped)
+            title(['Prewitt both' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'Roberts', 0.025*k);
+            figure; imshow(car_cropped)
+            title(['Roberts ' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'zerocross', 0.025*k, [0 2-k 0, 2-k 0 2-k, 0 2-k 0]);
+            figure; imshow(car_cropped)
+            title(['zerocross ' num2str(k, '%2d')]);   %dev
+            
+            car_cropped = edge(testcar, 'approxcanny', 0.025*k);
+            figure; imshow(car_cropped)
+            title(['approxcanny ' num2str(k, '%2d')]);   %dev
+        end
+
         
         for w = 1:size(car_cropped, 1)
             for v = 1:size(car_cropped , 2)
@@ -247,30 +297,44 @@ for i = 1:size(cars,2)
             end
         end
         
-%         figure; imshow(car_cropped)   %dev
-%         title('mid processing 1');   %dev
+        figure; imshow(car_cropped)   %dev
+        title('crop');   %dev
         
         car_cropped = bwmorph(car_cropped, 'thin');
-%         figure; imshow(car_cropped)   %dev
-%         title('thin');   %dev
-        
-%         car_cropped = imopen(car_cropped, strel('line', 20, 90));
-%         figure; imshow(car_cropped)   %dev
-%         title('mid processing 2');   %dev
+        figure; imshow(car_cropped)   %dev
+        title('thin');   %dev
         
 %         car_cropped = bwmorph(car_cropped, 'close');
         car_cropped = imclose(car_cropped, strel('disk', 10));
-%         figure; imshow(car_cropped)   %dev
-%         title('mid processing 2');   %dev
+        figure; imshow(car_cropped)   %dev
+        title('close');   %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-%         figure; imshow(car_cropped)   %dev
-%         title('filled');   %dev
+        figure; imshow(car_cropped)   %dev
+        title('fill');   %dev
         
-        car_cropped = bwmorph(car_cropped, 'open');
-%         figure; imshow(car_cropped)   %dev
-%         title('mid processing 2');   %dev
+        car_cropped = imopen(car_cropped, strel('disk', 30));
+        figure; imshow(car_cropped)   %dev
+        title('open');   %dev
         
+        
+%         for k = 1:5
+%             car_cropped = imopen(car_cropped, strel('disk', 25*k));
+%             figure; imshow(car_cropped)   %dev
+%             title(['open disk ' num2str(k, '%2d')]);   %dev
+% 
+%             car_cropped = imclose(car_cropped, strel('disk', 20));
+%             figure; imshow(car_cropped)   %dev
+%             title(['close disk' num2str(k, '%2d')]);   %dev
+%         end
+        
+%         car_cropped = imopen(car_cropped, strel('line', 90, 35));
+%         figure; imshow(car_cropped)   %dev
+%         title('open 90 35º');   %dev
+%         
+%         car_cropped = imopen(car_cropped, strel('line', 90, 0));
+%         figure; imshow(car_cropped)   %dev
+%         title('open 90 0');   %dev
         
         
 %         segIm = imbinarize(car_cropped);   %dev
@@ -283,8 +347,8 @@ for i = 1:size(cars,2)
 
         similarity(i,j) = 2*nnz(car_cropped&gndtru)/(nnz(car_cropped) + nnz(gndtru));
 
-    end
-end
+%     end
+% end
 
 sim_values = similarity(similarity ~= 0);
 
