@@ -171,7 +171,39 @@ class2 = 4;
 % formula = reg.Perimeter*reg.Perimeter / reg.Area;
 % box = reg.BoundingBox(4) * reg.BoundingBox(3);
 
-%-------------------------------------------------------------------------%
+%--------------------------First Hypothesis-------------------------------%
+% filename = 1;
+% while (filename ~= 0)
+%     [filename, path] = uigetfile('*.gif');
+%     if (filename == 0)
+%         break;
+%     end
+%     mask = imread(strcat(path,filename));
+%     split = strsplit(path,'\\');
+%     path = strcat(split{7},'\',split{8});
+%     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+%     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+%     formula = reg.Perimeter*reg.Perimeter / reg.Area;
+%     box = reg.BoundingBox(4) * reg.BoundingBox(3);
+%     image = strcat(path, filename);
+% 
+%     if (box > max_box_sed*1.005)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
+%         if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
+%             result = sprintf('Pick-Up');
+%         else
+%             result = sprintf('SUV');
+%         end
+%     else
+%         if (axis > max_axis_sed*1.05)
+%             result = sprintf('Compacto');     % Compacto always has the reason height/width bigger than Sedans
+%         else
+%             result = sprintf('Sedan');        % Last ones
+%         end
+%     end
+%     final = {image, result}
+% end
+
+%--------------------------Second Hypothesis-------------------------------%
 filename = 1;
 while (filename ~= 0)
     [filename, path] = uigetfile('*.gif');
@@ -186,7 +218,8 @@ while (filename ~= 0)
     formula = reg.Perimeter*reg.Perimeter / reg.Area;
     box = reg.BoundingBox(4) * reg.BoundingBox(3);
     image = strcat(path, filename);
-    if (box > max_box_sed*1.005)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
+    
+    if (formula > min_formula_pick_up*0.90)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
         if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
             result = sprintf('Pick-Up');
         else
