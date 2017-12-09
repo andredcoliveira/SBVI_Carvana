@@ -1,4 +1,4 @@
-function [max_area, max_axis, max_formula, max_box] = references(mask_all_side, class)
+function [max_area, max_axis, max_formula, max_box, min_area] = references(mask_class_side)
     min_area = 2000000;
     min_axis = 10;
     min_formula = 100;
@@ -9,8 +9,8 @@ function [max_area, max_axis, max_formula, max_box] = references(mask_all_side, 
     max_formula = 0;
     max_box = 0;
 
-    for i=1:size(mask_all_side{class}, 2)
-        reg = regionprops(mask_all_side{class}{i}, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+    for i=1:size(mask_class_side, 2)
+        reg = regionprops(mask_class_side{i}, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
 
         if (reg.Area < min_area)
             min_area = reg.Area;

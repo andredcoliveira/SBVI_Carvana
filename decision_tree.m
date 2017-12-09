@@ -133,16 +133,10 @@ mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 
 %% Testing %%
 
-mask_all_side = {mask_pick_side, mask_comp_side, mask_sed_side, mask_suv_side};
-class = 4;
-img = 1;
-mask = mask_all_side{class}{img};
-
-% fixed values %
-class1 = 3;
-class2 = 4;
-[max_area_sed, max_axis_sed, max_formula_sed, max_box_sed] = references(mask_all_side, class1);
-[max_area_suv, max_axis_suv, max_formula_suv, max_box_suv] = references(mask_all_side, class2);
+% mask_all_side = {mask_pick_side, mask_comp_side, mask_sed_side, mask_suv_side};
+% class = 4;
+% img = 1;
+% mask = mask_all_side{class}{img};
 
 % figure; imshow(mask, [])
 %-------------------------------------------------------------------------%
@@ -151,27 +145,16 @@ class2 = 4;
 % [height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask_all_side{class})
 % [max_susp_suv, min_susp] = suspension(mask_all_side{class});
 %-------------------------------------------------------------------------%
-
 % [max_susp_pick_up, min_susp_pick_up] = suspension(mask_pick_side);
 % suspension = decision_suspension(mask, min_susp_pick_up);
-%-------------------------------------------------------------------------%
-
 % dome = decision_dome(mask);
-%-------------------------------------------------------------------------%
-
 % [height, width, med_top, med_bottom, med_left, med_right] = tam_med(mask);
-% perimeter = 2*height + 2*width;
-% white_area = area(mask)*area(mask) / perimeter;
-% area = area(mask);
-% axis = height / width;
-%-------------------------------------------------------------------------%
 
-% reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
-% axis = reg.BoundingBox(4) / reg.BoundingBox(3);
-% formula = reg.Perimeter*reg.Perimeter / reg.Area;
-% box = reg.BoundingBox(4) * reg.BoundingBox(3);
 
-%--------------------------First Hypothesis-------------------------------%
+%% First Hypothesis %%
+
+% [max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+% [max_area_suv, max_axis_suv, max_formula_suv, max_box_suv, min_area_suv] = references(mask_suv_side);
 % filename = 1;
 % while (filename ~= 0)
 %     [filename, path] = uigetfile('*.gif');
@@ -203,7 +186,86 @@ class2 = 4;
 %     final = {image, result}
 % end
 
-%--------------------------Second Hypothesis-------------------------------%
+%% Second Hypothesis %%
+
+% [max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+% filename = 1;
+% while (filename ~= 0)
+%     [filename, path] = uigetfile('*.gif');
+%     if (filename == 0)
+%         break;
+%     end
+%     mask = imread(strcat(path,filename));
+%     split = strsplit(path,'\\');
+%     path = strcat(split{7},'\',split{8});
+%     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+%     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+%     formula = reg.Perimeter*reg.Perimeter / reg.Area;
+%     box = reg.BoundingBox(4) * reg.BoundingBox(3);
+%     image = strcat(path, filename);
+%     
+%     if (formula > max_formula_sed*1.2)
+%         result = sprintf('Pick-Up');
+%     else
+%         if (reg.Area > max_area_sed*1.04)
+%             result = sprintf('SUV');
+%         else
+%             if (axis > max_axis_sed*1.05)
+%                 result = sprintf('Compacto');
+%             else
+%                 result = sprintf('Sedan');
+%             end
+%         end
+%     end
+%     final = {image, result}
+% end
+
+%% Third Hypothesis %%
+
+% [max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+% [max_height_sed, max_width_sed] = tam_max(mask_sed_side);
+% filename = 1;
+% while (filename ~= 0)
+%     [filename, path] = uigetfile('*.gif');
+%     if (filename == 0)
+%         break;
+%     end
+%     mask = imread(strcat(path,filename));
+%     split = strsplit(path,'\\');
+%     path = strcat(split{7},'\',split{8});
+%     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+%     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+%     formula = reg.Perimeter*reg.Perimeter / reg.Area;
+%     box = reg.BoundingBox(4) * reg.BoundingBox(3);
+%     height = reg.BoundingBox(4);
+%     image = strcat(path, filename);
+%     
+%     mid_area_sed = (max_area_sed + min_area_sed)/2;
+%     
+%     if (formula > max_formula_sed*1.2)
+%         result = sprintf('Pick-Up');
+%     else
+%         if (reg.Area > mid_area_sed)
+%             if (height > max_height_sed*1.04)
+%                 result = sprintf('SUV');
+%             else
+%                 result = sprintf('Sedan');
+%             end
+%         else 
+%             if (axis > max_axis_sed*1.05)
+%                 result = sprintf('Compacto');
+%             else
+%                 result = sprintf('Sedan');
+%             end
+%         end
+%     end
+%     final = {image, result}
+% end
+
+%% Fourth Hypothesis %%
+
+[max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+[max_area_comp, max_axis_comp, max_formula_comp, max_box_comp, min_area_comp] = references(mask_comp_side);
 filename = 1;
 while (filename ~= 0)
     [filename, path] = uigetfile('*.gif');
@@ -219,17 +281,17 @@ while (filename ~= 0)
     box = reg.BoundingBox(4) * reg.BoundingBox(3);
     image = strcat(path, filename);
     
-    if (formula > min_formula_pick_up*0.90)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
-        if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
-            result = sprintf('Pick-Up');
-        else
-            result = sprintf('SUV');
-        end
+    if (formula > max_formula_sed*1.2)
+        result = sprintf('Pick-Up');
     else
-        if (axis > max_axis_sed*1.05)
-            result = sprintf('Compacto');     % Compacto always has the reason height/width bigger than Sedans
+        if (axis > max_axis_sed*1.04)
+            if (reg.Area > max_area_comp*1.2)
+                result = sprintf('SUV');
+            else
+                result = sprintf('Compacto');
+            end
         else
-            result = sprintf('Sedan');        % Last ones
+            result = sprintf('Sedan');
         end
     end
     final = {image, result}
