@@ -5,7 +5,7 @@ close all;
 %%%%% Iniciar compactos  %%%%%
 carros(:,:,1)=im2double(rgb2gray(imread('compacto/2faf504842df_09.jpg')));
 carros(:,:,2)=im2double(rgb2gray(imread('compacto/4b74275babf7_09.jpg')));
-carros(:,:,3)=im2double(rgb2gray(imread('compacto/47ea8f25c948_01.jpg')));
+carros(:,:,3)=im2double(rgb2gray(imread('compacto/47ea8f25c948_09.jpg')));
 carros(:,:,4)=im2double(rgb2gray(imread('compacto/898339fab87a_09.jpg')));
 
 
@@ -31,7 +31,7 @@ carros(:,:,16)=im2double(rgb2gray(imread('SUV/630335e37f40_09.jpg')));
 %%%%% Iniciar mask compactos  %%%%%
 mask(:,:,1)= imread('compacto/2faf504842df_09_mask.gif');
 mask(:,:,2)= imread('compacto/4b74275babf7_09_mask.gif');
-mask(:,:,3)= imread('compacto/47ea8f25c948_01_mask.gif');
+mask(:,:,3)= imread('compacto/47ea8f25c948_09_mask.gif');
 mask(:,:,4)= imread('compacto/898339fab87a_09_mask.gif');
 
 %%%%Iniciar mask pick_up %%%%
@@ -54,12 +54,12 @@ mask(:,:,16)= imread('SUV/630335e37f40_09_mask.gif');
 
 %%%%BRANDS %%%%
 brands(:,:,1)=im2double(rgb2gray(imread('brands/mini_preto.jpg')));
-brands(:,:,2)= im2double(rgb2gray(imread('brands/bmw_branco.jpg')));
+brands(:,:,2)= im2double(rgb2gray(imread('brands/bmw_preto.jpg')));
 brands(:,:,3)=im2double(rgb2gray(imread('brands/chevrolet_preto.jpg')));
-brands(:,:,4)=im2double(rgb2gray(imread('brands/ford_branco.jpg')));
-brands(:,:,5)=im2double(rgb2gray(imread('brands/honda_branco.jpg')));
-brands(:,:,6)=im2double(rgb2gray(imread('brands/jaguar.jpg')));
-brands(:,:,7)= im2double(rgb2gray(imread('brands/audi_branco.jpg')));
+brands(:,:,4)=im2double(rgb2gray(imread('brands/ford_preto.jpg')));
+brands(:,:,5)=im2double(rgb2gray(imread('brands/honda_preto.jpg')));
+brands(:,:,6)=im2double(rgb2gray(imread('brands/jaguar_preto.jpg')));
+brands(:,:,7)= im2double(rgb2gray(imread('brands/audi_preto.jpg')));
 
 
 
@@ -80,7 +80,7 @@ brands(:,:,7)= im2double(rgb2gray(imread('brands/audi_branco.jpg')));
 
 maxCorrValue = zeros(7,16,1);
 index = zeros(16,1);
-
+height = zeros(16,1);
 
 for num =1 :16
     I = carros(:,:,num);
@@ -90,11 +90,13 @@ for num =1 :16
     left = reg.BoundingBox(1);
     top = reg.BoundingBox(2);
     width = reg.BoundingBox(3);
-    height = reg.BoundingBox(4);
+    height(num) = reg.BoundingBox(4);
     
-    k1 = 1/3;
-    k2 = 1/3;
-    I_cropped = imcrop(I, [left+width*k1 top+height*k2  300 250]);
+    
+    
+    k1 = 2/5;
+    k2 = 1/4;
+    I_cropped = imcrop(I, [left+width*k1 top+height(num)*k2  width*0.3 height(num)*0.3]);
     I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');
    
     figure; imshow(I2)
