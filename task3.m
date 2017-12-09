@@ -62,29 +62,54 @@ brands(:,:,6)=im2double(rgb2gray(imread('brands/jaguar_preto.jpg')));
 brands(:,:,7)= im2double(rgb2gray(imread('brands/audi_preto.jpg')));
 
 
+%% Iniciar compactos %%
+mask_side(:,:,1) = imread('compacto/2faf504842df_05_mask.gif'); % side
+mask_side(:,:,2) = imread('compacto/4b74275babf7_13_mask.gif'); % side
+mask_side(:,:,3) = imread('compacto/47ea8f25c948_05_mask.gif'); % side
+mask_side(:,:,4) = imread('compacto/898339fab87a_05_mask.gif'); % side
 
-% [y,x] = size(carros(:,:,1));
-% center_x = x/2;
-% center_y = y/2;
-% radius = 5;
-% left_x = center_x - 80;  
-% top_y = center_y - 180;
+mask_comp_side = {mask_side(:,:,1), mask_side(:,:,2), mask_side(:,:,3), mask_side(:,:,4)};
 
+%% Iniciar Pick Up %%
+mask_side(:,:,5) = imread('pick_up/0ed6904e1004_05_mask.gif'); % side
+mask_side(:,:,6) = imread('pick_up/3cb21125f126_13_mask.gif'); % side
+mask_side(:,:,7) = imread('pick_up/0795e132d090_05_mask.gif'); % side
 
+mask_pick_side = {mask_side(:,:,5),mask_side(:,:,6),mask_side(:,:,7)};
 
-% center_x = left + width/2;
-% center_y = top + height/2;
-% left_x = center_x - 180/2;  
-% top_y = center_y - 80/2;
+%% Iniciar Sedan %%
+mask_side(:,:,8) = imread('sedan/1ae8a68a40e4_13_mask.gif'); % side
+mask_side(:,:,9) = imread('sedan/2ea62c1beee7_05_mask.gif'); % side
+mask_side(:,:,10) = imread('sedan/5fb012d30fd9_13_mask.gif'); % side
+mask_side(:,:,11) = imread('sedan/7fbc761387f3_05_mask.gif'); % side
+mask_side(:,:,12) = imread('sedan/34b0c08544a5_05_mask.gif'); % side
 
+mask_sed_side = {mask_side(:,:,8), mask_side(:,:,9), mask_side(:,:,10), mask_side(:,:,11), mask_side(:,:,12)};
+
+%% Iniciar SUV %%
+mask_side(:,:,13) = imread('SUV/3d7a1030deeb_05_mask.gif'); % side
+mask_side(:,:,14) = imread('SUV/4fc2470c0f7b_05_mask.gif'); % side
+mask_side(:,:,15) = imread('SUV/54ee69d7d5e5_05_mask.gif'); % side
+mask_side(:,:,16) = imread('SUV/630335e37f40_05_mask.gif'); % side
+
+mask_suv_side = {mask_side(:,:,13), mask_side(:,:,14), mask_side(:,:,15), mask_side(:,:,16)};
+
+%% Fourth Hypothesis %%
+
+[max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+[max_area_comp, max_axis_comp, max_formula_comp, max_box_comp, min_area_comp] = references(mask_comp_side);
 
 maxCorrValue = zeros(7,16,1);
 index = zeros(16,1);
 height = zeros(16,1);
 
+
+
+
 for num =1 :16
     I = carros(:,:,num);
     M = mask(:,:,num);
+    S = mask_side(:,:,num);
     
     reg = regionprops(M, 'BoundingBox');
     left = reg.BoundingBox(1);
@@ -92,7 +117,25 @@ for num =1 :16
     width = reg.BoundingBox(3);
     height(num) = reg.BoundingBox(4);
     
+    reg = regionprops(S, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+    axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+    formula = reg.Perimeter*reg.Perimeter / reg.Area;
+    box = reg.BoundingBox(4) * reg.BoundingBox(3);
+%   image = strcat(path, filename);
     
+    if (formula > max_formula_sed*1.2)
+        result = sprintf('Pick-Up');
+    else
+        if (axis > max_axis_sed*1.04)
+            if (reg.Area > max_area_comp*1.2)
+                result = sprintf('SUV');
+            else
+                result = sprintf('Compacto');
+            end
+        else
+            result = sprintf('Sedan');
+        end
+    end
     
     k1 = 2/5;
     k2 = 1/4;
