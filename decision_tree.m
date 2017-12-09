@@ -134,8 +134,8 @@ mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 %% Testing %%
 
 mask_all_side = {mask_pick_side, mask_comp_side, mask_sed_side, mask_suv_side};
-class = 1;
-img = 3;
+class = 4;
+img = 1;
 mask = mask_all_side{class}{img};
 
 % fixed values %
@@ -166,23 +166,38 @@ class2 = 4;
 % axis = height / width;
 %-------------------------------------------------------------------------%
 
-reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
-axis = reg.BoundingBox(4) / reg.BoundingBox(3);
-formula = reg.Perimeter*reg.Perimeter / reg.Area;
-box = reg.BoundingBox(4) * reg.BoundingBox(3);
+% reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+% axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+% formula = reg.Perimeter*reg.Perimeter / reg.Area;
+% box = reg.BoundingBox(4) * reg.BoundingBox(3);
 
 %-------------------------------------------------------------------------%
-
-if (box > max_box_sed*1.05)
-    if (formula > max_formula_suv*1.2)
-        text = sprintf('Pick-Up')
-    else
-        text = sprintf('SUV')
+filename = 1;
+while (filename ~= 0)
+    [filename, path] = uigetfile('*.gif');
+    if (filename == 0)
+        break;
     end
-else
-    if (axis > max_axis_sed*1.05)
-        text = sprintf('Compacto')
+    mask = imread(strcat(path,filename));
+    split = strsplit(path,'\\');
+    path = strcat(split{7},'\',split{8});
+    reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+    axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+    formula = reg.Perimeter*reg.Perimeter / reg.Area;
+    box = reg.BoundingBox(4) * reg.BoundingBox(3);
+    image = strcat(path, filename);
+    if (box > max_box_sed*1.005)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
+        if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
+            result = sprintf('Pick-Up');
+        else
+            result = sprintf('SUV');
+        end
     else
-        text = sprintf('Sedan')
+        if (axis > max_axis_sed*1.05)
+            result = sprintf('Compacto');     % Compacto always has the reason height/width bigger than Sedans
+        else
+            result = sprintf('Sedan');        % Last ones
+        end
     end
+    final = {image, result}
 end
