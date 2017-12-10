@@ -104,8 +104,6 @@ index = zeros(16,1);
 height = zeros(16,1);
 
 
-
-
 for num =1 :16
     I = carros(:,:,num);
     M = mask(:,:,num);
@@ -115,7 +113,7 @@ for num =1 :16
     left = reg.BoundingBox(1);
     top = reg.BoundingBox(2);
     width = reg.BoundingBox(3);
-    height(num) = reg.BoundingBox(4);
+    height = reg.BoundingBox(4);
     
     reg = regionprops(S, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
@@ -137,12 +135,37 @@ for num =1 :16
         end
     end
     
-    k1 = 2/5;
-    k2 = 1/4;
-    I_cropped = imcrop(I, [left+width*k1 top+height(num)*k2  width*0.3 height(num)*0.3]);
-    I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');
-   
-    figure; imshow(I2)
+    if(strcmp(result,'Compacto'))
+        k1 = 2/5;
+        k2 = 1/3;
+        k3 = 1/5;
+        I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
+        figure; imshow(I2)
+        
+    elseif(strcmp(result,'Sedan'))
+        k1 = 2/5;
+        k2 = 1/3;
+        k3 = 1/5;
+        I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
+        figure; imshow(I2)
+        
+    elseif(strcmp(result,'SUV'))
+        k1 = 2/5;
+        k2 = 1/4;
+        k3 = 1/4;
+        I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
+        figure; imshow(I2)
+    else    
+        k1 = 1/3;
+        k2 = 4/9;
+        k3 = 1/3;
+        I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
+        figure; imshow(I2)
+    end
 
     for i = 1:7  
         B = imfilter(brands(:,:,i), fspecial('log', 5, 0.5), 'replicate');
