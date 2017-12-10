@@ -114,13 +114,8 @@ function gndtrus = getGroundTruths()
 
 
     %% Gather everything
+    
     gndtrus = {mask_comp_front, mask_comp_back, mask_comp_side, mask_comp_other, mask_pick_front, mask_pick_back, mask_pick_side, mask_pick_other, mask_sed_front, mask_sed_back, mask_sed_side, mask_sed_other, mask_suv_front, mask_suv_back, mask_suv_side, mask_suv_other};
-
-%     figure; imshow(gndtrus{1}{1}, [])  % gndtrus -> mask_comp_front -> mask_compact1
-%     type_view = size(gndtrus,2)  % gndtrus rows
-%     gndtru = size(gndtrus{1},2)  % type_view rows
-%     img_rows = size(gndtrus{1}{1},1)
-%     img_cols = size(gndtrus{1}{1},2)
 
 end
 
