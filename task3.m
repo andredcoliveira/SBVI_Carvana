@@ -1,4 +1,5 @@
 clc
+clear
 close all;
 
 %%%%% Iniciar compactos  %%%%%
@@ -179,26 +180,39 @@ for num =1 :16
 end    
 
 
-for i = 1:7   
-    max_brand(i)=0;
-    max_brand(i) = max(maxCorrValue(i,:));  
-end
+ for i = 1:7   
+     max_brand(i)=0;
+     max_brand(i) = max(maxCorrValue(i,:));  
+ end
 
 for num = 1:16    
     maximo = 0;
     for j=1:7
-      div(j) = maxCorrValue(j,num)/max_brand(j);
+      div(j) = maxCorrValue(j,num);
      if (div(j) > maximo)
          maximo = div(j);
          index(num) = j;
      end
     end
+    
+    if( index(num) == 1)
+        result = sprintf('Mini');
+    elseif ( index(num) == 2)
+        result = sprintf('BMW');
+    elseif ( index(num) == 3)
+        result = sprintf('Chevrolet');
+    elseif ( index(num) == 4)
+        result = sprintf('Ford');
+    elseif ( index(num) == 5)
+        result = sprintf('Honda');    
+    elseif ( index(num) == 6)
+        result = sprintf('Jaguar');
+    elseif ( index(num) == 7)
+        result = sprintf('Audi');
+    end
 end
-% index = 1   Mini
-% index = 2   BMW
-% index = 3   Chevolet
-% index = 4   Ford
-% index = 5   Honda
-% index = 6   Jaguar
-% index = 7   Audi
+
+
+
+
 
