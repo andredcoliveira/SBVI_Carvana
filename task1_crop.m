@@ -42,7 +42,7 @@ lw_inf = [14 37];
 % for i = 1:size(cars,2)
 %     for j = 1:size(cars{i},2)
 % for x = 1:2
-%         i = 3; j = 1;  %dev
+        i = 3; j = 1;  %dev
         
 %         if( x == 1)
             car = cars{i}{j};
