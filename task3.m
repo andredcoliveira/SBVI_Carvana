@@ -141,7 +141,7 @@ for num =1 :16
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        %figure; imshow(I2)
+%         figure; imshow(I2)
         
     elseif(strcmp(result,'Sedan'))
         k1 = 2/5;
@@ -149,7 +149,7 @@ for num =1 :16
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        %figure; imshow(I2)
+%         figure; imshow(I2)
         
     elseif(strcmp(result,'SUV'))
         k1 = 2/5;
@@ -157,14 +157,15 @@ for num =1 :16
         k3 = 1/4;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        %figure; imshow(I2)
+%         figure; imshow(I2)
+
     else    
         k1 = 1/3;
         k2 = 4/9;
         k3 = 1/3;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        %figure; imshow(I2)
+%         figure; imshow(I2)
     end
 
     for i = 1:7  
@@ -180,10 +181,12 @@ for num =1 :16
 end    
 
 
- for i = 1:7   
-     max_brand(i)=0;
-     max_brand(i) = max(maxCorrValue(i,:));  
- end
+%  for i = 1:7   
+%      max_brand(i)=0;
+%      max_brand(i) = mean(maxCorrValue(i,:));  
+%  end
+ 
+
 
 for num = 1:16    
     maximo = 0;
@@ -196,19 +199,19 @@ for num = 1:16
     end
     
     if( index(num) == 1)
-        result = sprintf('Mini');
+        brand = sprintf('Mini');
     elseif ( index(num) == 2)
-        result = sprintf('BMW');
+        brand = sprintf('BMW');
     elseif ( index(num) == 3)
-        result = sprintf('Chevrolet');
+        brand = sprintf('Chevrolet');
     elseif ( index(num) == 4)
-        result = sprintf('Ford');
+        brand = sprintf('Ford');
     elseif ( index(num) == 5)
-        result = sprintf('Honda');    
+        brand = sprintf('Honda');    
     elseif ( index(num) == 6)
-        result = sprintf('Jaguar');
+        brand = sprintf('Jaguar');
     elseif ( index(num) == 7)
-        result = sprintf('Audi');
+        brand = sprintf('Audi');
     end
 end
 
