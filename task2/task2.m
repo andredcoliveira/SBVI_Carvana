@@ -3,9 +3,9 @@ clear;
 close all;
 
 %% Iniciar Pick Up %%
-mask_pick_up3 = imread('pick_up/0ed6904e1004_05_mask.gif'); % side
-mask_pick_up7 = imread('pick_up/3cb21125f126_13_mask.gif'); % side
-mask_pick_up11 = imread('pick_up/0795e132d090_05_mask.gif'); % side
+mask_pick_up3 = imread('../pick_up/0ed6904e1004_05_mask.gif'); % side
+mask_pick_up7 = imread('../pick_up/3cb21125f126_13_mask.gif'); % side
+mask_pick_up11 = imread('../pick_up/0795e132d090_05_mask.gif'); % side
 
 mask_pick_side = {mask_pick_up3, mask_pick_up7, mask_pick_up11};
 
@@ -26,10 +26,10 @@ mask_pick_side = {mask_pick_up3, mask_pick_up7, mask_pick_up11};
 % dome_pick_up3 = decision_dome(mask_pick_up11);
 
 %% Iniciar compactos %%
-mask_compact3 = imread('compacto/2faf504842df_05_mask.gif'); % side
-mask_compact7 = imread('compacto/4b74275babf7_13_mask.gif'); % side
-mask_compact11 = imread('compacto/47ea8f25c948_05_mask.gif'); % side
-mask_compact15 = imread('compacto/898339fab87a_05_mask.gif'); % side
+mask_compact3 = imread('../compacto/2faf504842df_05_mask.gif'); % side
+mask_compact7 = imread('../compacto/4b74275babf7_13_mask.gif'); % side
+mask_compact11 = imread('../compacto/47ea8f25c948_05_mask.gif'); % side
+mask_compact15 = imread('../compacto/898339fab87a_05_mask.gif'); % side
 
 mask_comp_side = {mask_compact3, mask_compact7, mask_compact11, mask_compact15};
 
@@ -52,11 +52,11 @@ mask_comp_side = {mask_compact3, mask_compact7, mask_compact11, mask_compact15};
 % dome_compact4 = decision_dome(mask_compact15);
 
 %% Iniciar Sedan %%
-mask_sedan3 = imread('sedan/1ae8a68a40e4_13_mask.gif'); % side
-mask_sedan7 = imread('sedan/2ea62c1beee7_05_mask.gif'); % side
-mask_sedan11 = imread('sedan/5fb012d30fd9_13_mask.gif'); % side
-mask_sedan15 = imread('sedan/7fbc761387f3_05_mask.gif'); % side
-mask_sedan19 = imread('sedan/34b0c08544a5_05_mask.gif'); % side
+mask_sedan3 = imread('../sedan/1ae8a68a40e4_13_mask.gif'); % side
+mask_sedan7 = imread('../sedan/2ea62c1beee7_05_mask.gif'); % side
+mask_sedan11 = imread('../sedan/5fb012d30fd9_13_mask.gif'); % side
+mask_sedan15 = imread('../sedan/7fbc761387f3_05_mask.gif'); % side
+mask_sedan19 = imread('../sedan/34b0c08544a5_05_mask.gif'); % side
 
 mask_sed_side = {mask_sedan3, mask_sedan7, mask_sedan11, mask_sedan15, mask_sedan19};
 
@@ -81,10 +81,10 @@ mask_sed_side = {mask_sedan3, mask_sedan7, mask_sedan11, mask_sedan15, mask_seda
 % dome_sedan5 = decision_dome(mask_sedan19);
 
 %% Iniciar SUV %%
-mask_SUV3 = imread('SUV/3d7a1030deeb_05_mask.gif'); % side
-mask_SUV7 = imread('SUV/4fc2470c0f7b_05_mask.gif'); % side
-mask_SUV11 = imread('SUV/54ee69d7d5e5_05_mask.gif'); % side
-mask_SUV15 = imread('SUV/630335e37f40_05_mask.gif'); % side
+mask_SUV3 = imread('../SUV/3d7a1030deeb_05_mask.gif'); % side
+mask_SUV7 = imread('../SUV/4fc2470c0f7b_05_mask.gif'); % side
+mask_SUV11 = imread('../SUV/54ee69d7d5e5_05_mask.gif'); % side
+mask_SUV15 = imread('../SUV/630335e37f40_05_mask.gif'); % side
 
 mask_suv_side = {mask_SUV3, mask_SUV7, mask_SUV11, mask_SUV15};
 
@@ -128,38 +128,38 @@ mask = mask_all_side{class}{img};
 
 %% First Hypothesis %%
 
-% [max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
-% [max_area_suv, max_axis_suv, max_formula_suv, max_box_suv, min_area_suv] = references(mask_suv_side);
-% filename = 1;
-% while (filename ~= 0)
-%     [filename, path] = uigetfile('*.gif');
-%     if (filename == 0)
-%         break;
-%     end
-%     mask = imread(strcat(path,filename));
-%     split = strsplit(path,'\\');
-%     path = strcat(split{7},'\',split{8});
-%     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
-%     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
-%     formula = reg.Perimeter*reg.Perimeter / reg.Area;
-%     box = reg.BoundingBox(4) * reg.BoundingBox(3);
-%     image = strcat(path, filename);
-% 
-%     if (box > max_box_sed*1.005)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
-%         if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
-%             result = sprintf('Pick-Up');
-%         else
-%             result = sprintf('SUV');
-%         end
-%     else
-%         if (axis > max_axis_sed*1.05)
-%             result = sprintf('Compacto');     % Compacto always has the reason height/width bigger than Sedans
-%         else
-%             result = sprintf('Sedan');        % Last ones
-%         end
-%     end
-%     final = {image, result}
-% end
+[max_area_sed, max_axis_sed, max_formula_sed, max_box_sed, min_area_sed] = references(mask_sed_side);
+[max_area_suv, max_axis_suv, max_formula_suv, max_box_suv, min_area_suv] = references(mask_suv_side);
+filename = 1;
+while (filename ~= 0)
+    [filename, path] = uigetfile('*.gif');
+    if (filename == 0)
+        break;
+    end
+    mask = imread(strcat(path,filename));
+    split = strsplit(path,'\\');
+    path = strcat(split{length(split)-1}, '\', split{length(split)});
+    reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
+    axis = reg.BoundingBox(4) / reg.BoundingBox(3);
+    formula = reg.Perimeter*reg.Perimeter / reg.Area;
+    box = reg.BoundingBox(4) * reg.BoundingBox(3);
+    image = strcat(path, filename);
+
+    if (box > max_box_sed*1.005)           % Pick ups and SUVs always bigger than maz size of box in all Sedan (onde pode merdar mais facilmente)
+        if (formula > max_formula_suv*1.2) % Pick up always bigger than max size of formula in all SUVs
+            result = sprintf('Pick-Up');
+        else
+            result = sprintf('SUV');
+        end
+    else
+        if (axis > max_axis_sed*1.05)
+            result = sprintf('Compacto');     % Compacto always has the reason height/width bigger than Sedans
+        else
+            result = sprintf('Sedan');        % Last ones
+        end
+    end
+    final = {image, result}
+end
 
 %% Second Hypothesis %%
 
@@ -172,7 +172,7 @@ mask = mask_all_side{class}{img};
 %     end
 %     mask = imread(strcat(path,filename));
 %     split = strsplit(path,'\\');
-%     path = strcat(split{7},'\',split{8});
+%     path = strcat(split{length(split)-1}, '\', split{length(split)});
 %     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
 %     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
 %     formula = reg.Perimeter*reg.Perimeter / reg.Area;
@@ -180,15 +180,15 @@ mask = mask_all_side{class}{img};
 %     image = strcat(path, filename);
 %     
 %     if (formula > max_formula_sed*1.2)
-%         result = sprintf('Pick-Up');
+%         result = sprintf('../pick-Up');
 %     else
 %         if (reg.Area > max_area_sed*1.04)
-%             result = sprintf('SUV');
+%             result = sprintf('../SUV');
 %         else
 %             if (axis > max_axis_sed*1.05)
-%                 result = sprintf('Compacto');
+%                 result = sprintf('../compacto');
 %             else
-%                 result = sprintf('Sedan');
+%                 result = sprintf('../sedan');
 %             end
 %         end
 %     end
@@ -207,7 +207,7 @@ mask = mask_all_side{class}{img};
 %     end
 %     mask = imread(strcat(path,filename));
 %     split = strsplit(path,'\\');
-%     path = strcat(split{7},'\',split{8});
+%     path = strcat(split{length(split)-1}, '\', split{length(split)});
 %     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
 %     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
 %     formula = reg.Perimeter*reg.Perimeter / reg.Area;
@@ -218,19 +218,19 @@ mask = mask_all_side{class}{img};
 %     mid_area_sed = (max_area_sed + min_area_sed)/2;
 %     
 %     if (formula > max_formula_sed*1.2)
-%         result = sprintf('Pick-Up');
+%         result = sprintf('../pick-Up');
 %     else
 %         if (reg.Area > mid_area_sed)
 %             if (height > max_height_sed*1.04)
-%                 result = sprintf('SUV');
+%                 result = sprintf('../SUV');
 %             else
-%                 result = sprintf('Sedan');
+%                 result = sprintf('../sedan');
 %             end
 %         else 
 %             if (axis > max_axis_sed*1.05)
-%                 result = sprintf('Compacto');
+%                 result = sprintf('../compacto');
 %             else
-%                 result = sprintf('Sedan');
+%                 result = sprintf('../sedan');
 %             end
 %         end
 %     end
@@ -249,7 +249,7 @@ mask = mask_all_side{class}{img};
 %     end
 %     mask = imread(strcat(path,filename));
 %     split = strsplit(path,'\\');
-%     path = strcat(split{7},'\',split{8});
+%     path = strcat(split{length(split)-1}, '\', split{length(split)});
 %     reg = regionprops(mask, 'Area', 'BoundingBox', 'Perimeter', 'Orientation', 'Eccentricity');
 %     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
 %     formula = reg.Perimeter*reg.Perimeter / reg.Area;
@@ -257,16 +257,16 @@ mask = mask_all_side{class}{img};
 %     image = strcat(path, filename);
 %     
 %     if (formula > max_formula_sed*1.2)
-%         result = sprintf('Pick-Up');
+%         result = sprintf('../pick-Up');
 %     else
 %         if (axis > max_axis_sed*1.04)
 %             if (reg.Area > max_area_comp*1.2)
-%                 result = sprintf('SUV');
+%                 result = sprintf('../SUV');
 %             else
-%                 result = sprintf('Compacto');
+%                 result = sprintf('../compacto');
 %             end
 %         else
-%             result = sprintf('Sedan');
+%             result = sprintf('../sedan');
 %         end
 %     end
 %     final = {image, result}
