@@ -53,7 +53,7 @@ for i = 1:size(cars,2)
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
         
-        % left / write coordinates
+        %% left / write coordinates
         
         sum_cols = zeros(1, size(car_sides,2));
         for k = 1:size(car_sides,2)
@@ -67,12 +67,12 @@ for i = 1:size(cars,2)
         c1 = 0;
         c2 = 0;
         for k = 1:min(size(maxima,2), size(minima,2))
-            if(abs(maxima(k)) < 0.20*max(maxima))
+            if(abs(maxima(k)) < 0.15*max(maxima))
                 maxima(k) = 0;
             else
                 c1 = c1 + 1;
             end
-            if(abs(minima(k)) < 0.20*max(minima))
+            if(abs(minima(k)) < 0.15*max(minima))
                 minima(k) = 0;
             else
                 c2 = c2 + 1;
