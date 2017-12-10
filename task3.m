@@ -103,7 +103,6 @@ maxCorrValue = zeros(7,16,1);
 index = zeros(16,1);
 height = zeros(16,1);
 
-
 for num =1 :16
     I = carros(:,:,num);
     M = mask(:,:,num);
@@ -119,7 +118,6 @@ for num =1 :16
     axis = reg.BoundingBox(4) / reg.BoundingBox(3);
     formula = reg.Perimeter*reg.Perimeter / reg.Area;
     box = reg.BoundingBox(4) * reg.BoundingBox(3);
-%   image = strcat(path, filename);
     
     if (formula > max_formula_sed*1.2)
         result = sprintf('Pick-Up');
@@ -140,32 +138,40 @@ for num =1 :16
         k2 = 1/3;
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I_cropped = adapthisteq(I_cropped);
+        figure; imshow(I_cropped)
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-%         figure; imshow(I2)
+        figure; imshow(I2)
         
     elseif(strcmp(result,'Sedan'))
         k1 = 2/5;
         k2 = 1/3;
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I_cropped = adapthisteq(I_cropped);
+        figure; imshow(I_cropped)
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-%         figure; imshow(I2)
+        figure; imshow(I2)
         
     elseif(strcmp(result,'SUV'))
         k1 = 2/5;
         k2 = 1/4;
         k3 = 1/4;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I_cropped = adapthisteq(I_cropped);
+        figure; imshow(I_cropped)
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-%         figure; imshow(I2)
+        figure; imshow(I2)
 
     else    
         k1 = 1/3;
         k2 = 4/9;
         k3 = 1/3;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
+        I_cropped = adapthisteq(I_cropped);
+        figure; imshow(I_cropped)
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-%         figure; imshow(I2)
+        figure; imshow(I2)
     end
 
     for i = 1:7  
@@ -191,27 +197,27 @@ end
 for num = 1:16    
     maximo = 0;
     for j=1:7
-      div(j) = maxCorrValue(j,num);
-     if (div(j) > maximo)
-         maximo = div(j);
+      div(j, num) = maxCorrValue(j,num);
+     if (div(j, num) > maximo)
+         maximo = div(j, num);
          index(num) = j;
      end
     end
     
     if( index(num) == 1)
-        brand = sprintf('Mini');
+        brand = sprintf('Mini')
     elseif ( index(num) == 2)
-        brand = sprintf('BMW');
+        brand = sprintf('BMW')
     elseif ( index(num) == 3)
-        brand = sprintf('Chevrolet');
+        brand = sprintf('Chevrolet')
     elseif ( index(num) == 4)
-        brand = sprintf('Ford');
+        brand = sprintf('Ford')
     elseif ( index(num) == 5)
-        brand = sprintf('Honda');    
+        brand = sprintf('Honda')    
     elseif ( index(num) == 6)
-        brand = sprintf('Jaguar');
+        brand = sprintf('Jaguar')
     elseif ( index(num) == 7)
-        brand = sprintf('Audi');
+        brand = sprintf('Audi')
     end
 end
 
