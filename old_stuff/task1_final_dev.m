@@ -44,8 +44,12 @@ lw_inf = [14 37];
 
 %% Segmentation
 
+% for testee = 1:10 %dev
+
 for i = 1:size(cars,2)
     for j = 1:size(cars{i},2)
+        
+%         i = 7; j = 1; %dev
 
         car = cars{i}{j};
             
@@ -272,14 +276,49 @@ for i = 1:size(cars,2)
             lines = old_lines; % get diagonals
         end
         
+%         figure; imshow(car_cropped); %dev
+        
         car_cropped = bwmorph(car_cropped, 'thin');
         
+%         figure; imshow(car_cropped); %dev
+        
+%         car_cropped = imclose(car_cropped, strel('disk', 20));
         car_cropped = imclose(car_cropped, strel('octagon', 18));
+        
+%         figure; imshow(car_cropped); %dev
+        
+%         car_cropped = imopen(car_cropped, strel('disk', 10)); %dev
+%         
+% %         figure; imshow(car_cropped); %dev
+% %         title('dev 1');
+%         
+%         car_cropped = imclose(car_cropped, strel('disk', 50)); %dev
+%         
+% %         figure; imshow(car_cropped); %dev
+% %         title('dev 2');
+%         
+%         car_cropped = imopen(car_cropped, strel('disk', 25)); %dev
+%         
+% %         figure; imshow(car_cropped); %dev
+% %         title('dev 3');
+%         
+%         car_cropped = imclose(car_cropped, strel('disk', 50)); %dev
+%         
+% %         figure; imshow(car_cropped); %dev
+% %         title('dev 4');
+%         
+%         car_cropped = imclose(car_cropped, strel('line', 150, 90)); %dev
+%         
+% %         figure; imshow(car_cropped); %dev
+% %         title('dev 4');
         
         car_cropped = imfill(car_cropped, 'holes');
         
+%         figure; imshow(car_cropped); %dev
+        
         car_cropped = imopen(car_cropped, strel('disk', 65));
         
+%         figure; imshow(car_cropped); %dev
 
         %% Efficiency
 
@@ -295,3 +334,5 @@ sim_values = similarity(similarity ~= 0);
 average_efficiency = mean(sim_values);
 
 fprintf('\n\tEficiência mínima:  %2.2f%%\n\tEficiência máxima:  %2.2f%%\n\tEficiência média:   %2.2f%%\n', min(sim_values)*100, max(sim_values)*100, average_efficiency*100);
+
+% end %dev
