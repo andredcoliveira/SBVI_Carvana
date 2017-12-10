@@ -43,8 +43,6 @@ lw_inf = [14 37];
 
 %% Segmentation
 
-% for testee = 1:5 %dev
-
 for i = 1:size(cars,2)
     for j = 1:size(cars{i},2)
         
@@ -295,5 +293,3 @@ sim_values = similarity(similarity ~= 0);
 average_efficiency = mean(sim_values);
 
 fprintf('\n\tEficiência mínima:  %2.2f%%\n\tEficiência máxima:  %2.2f%%\n\tEficiência média:   %2.2f%%\n', min(sim_values)*100, max(sim_values)*100, average_efficiency*100);
-
-% end %dev
