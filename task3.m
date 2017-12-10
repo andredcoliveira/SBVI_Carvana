@@ -1,5 +1,4 @@
 clc
-clear
 close all;
 
 %%%%% Iniciar compactos  %%%%%
@@ -141,7 +140,7 @@ for num =1 :16
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        figure; imshow(I2)
+        %figure; imshow(I2)
         
     elseif(strcmp(result,'Sedan'))
         k1 = 2/5;
@@ -149,7 +148,7 @@ for num =1 :16
         k3 = 1/5;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        figure; imshow(I2)
+        %figure; imshow(I2)
         
     elseif(strcmp(result,'SUV'))
         k1 = 2/5;
@@ -157,14 +156,14 @@ for num =1 :16
         k3 = 1/4;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        figure; imshow(I2)
+        %figure; imshow(I2)
     else    
         k1 = 1/3;
         k2 = 4/9;
         k3 = 1/3;
         I_cropped = imcrop(I, [left+width*k1 top+height*k2  width*k3 height*k3]);
         I2 = imfilter(I_cropped, fspecial('log', 5, 0.4), 'replicate');   
-        figure; imshow(I2)
+        %figure; imshow(I2)
     end
 
     for i = 1:7  
@@ -175,20 +174,26 @@ for num =1 :16
 %        figure;surf(correlationOutput),shading flat
        maxCorrValue(i,num) = max(abs(correlationOutput(:)));
        
-    end
-    
-    maximo = 0;
-    for j=1:7
-     if (maxCorrValue(j,num) > maximo)
-         maximo = maxCorrValue(j, num);
-         index(num) = j;
-     end
-    end
-    
+    end      
     
 end    
 
 
+for i = 1:7   
+    max_brand(i)=0;
+    max_brand(i) = max(maxCorrValue(i,:));  
+end
+
+for num = 1:16    
+    maximo = 0;
+    for j=1:7
+      div(j) = maxCorrValue(j,num)/max_brand(j);
+     if (div(j) > maximo)
+         maximo = div(j);
+         index(num) = j;
+     end
+    end
+end
 % index = 1   Mini
 % index = 2   BMW
 % index = 3   Chevolet
@@ -197,23 +202,3 @@ end
 % index = 6   Jaguar
 % index = 7   Audi
 
-% for i = 1 :16
-%    figure; imshow(carros(:,:,i))
-%    [y,x] = size(carros(:,:,1));
-%    center_x = x/2;
-%    center_y = y/2;
-%    radius = 5;
-%    left_x = center_x - 60;  
-%    top_y = center_y - 120;
-% 
-%    
-%    
-% %    se = strel('line', 1, 1);
-% %    I2 = imdilate(I, se);
-% %    BW =imclearborder(I2, 8);
-% %    figure
-% %    imshow(BW)
-% %    k = imclose(BW,strel('square',50));
-% %    figure
-% %    imshow(k)
-% end
