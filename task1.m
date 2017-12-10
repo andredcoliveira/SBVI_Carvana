@@ -278,6 +278,11 @@ for i = 1:size(cars,2)
         
         car_cropped = imfill(car_cropped, 'holes');
         
+        car_cropped = imclose(car_cropped, strel('line', 30, 120));
+        car_cropped = imclose(car_cropped, strel('line', 30, 60));
+        
+        car_cropped = imfill(car_cropped, 'holes');
+
         car_cropped = imopen(car_cropped, strel('disk', 65));
         
 
