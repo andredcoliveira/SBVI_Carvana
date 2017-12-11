@@ -297,25 +297,19 @@ lw_inf = [14 37];
         figure; imshow(car_cropped); title('s/ lines'); %dev
         
         car_cropped = bwmorph(car_cropped, 'thin');
-        figure; imshow(car_cropped); title('bwmorph - thin'); %dev
-       
+        
+        
         car_cropped = imclose(car_cropped, strel('octagon', 18));
-        figure; imshow(car_cropped); title('close - octagon 18'); %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-        figure; imshow(car_cropped); title('fill - holes'); %dev
         
         car_cropped = imclose(car_cropped, strel('line', 30, 120));
-        figure; imshow(car_cropped); title('close - line 30 120'); %dev
         
         car_cropped = imclose(car_cropped, strel('line', 30, 60));
-        figure; imshow(car_cropped); title('close - line 30 60'); %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-        figure; imshow(car_cropped); title('fill holes'); %dev
 
         car_cropped = imopen(car_cropped, strel('disk', 65));
-        figure; imshow(car_cropped); title('opendisk 65'); %dev
 
 
         %% Efficiency
