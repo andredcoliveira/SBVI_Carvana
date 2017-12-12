@@ -44,25 +44,34 @@ lw_inf = [14 37];
 
 % for i = 1:size(cars,2)
 %     for j = 1:size(cars{i},2)
-        i = 1; j = 4;  %dev
+        i = 12; j = 4;  %dev
         
         car = cars{i}{j};
-%         figure; imshow(car)  %dev
-%         title('original');  %dev
+        figure; imshow(cars{i}{j}); title('Original'); %dev
+
             
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
         
         %% left / write coordinates
         
+%         figure; imshow(cars{i}{j}); title('left/write'); %dev
+        
         sum_cols = zeros(1, size(car_sides,2));
         for k = 1:size(car_sides,2)
             sum_cols(k) = sum(car_sides(:,k));
         end
+%         figure; plot(sum_cols); title('original sum cols');  %dev
+%         figure; plot(diff(sum_cols)); title('original diff sum cols');  %dev
         
         
         [maxima, max_x] = findpeaks(diff(sum_cols));
         [minima, min_x] = findpeaks(diff(-sum_cols));
+        
+%         figure; subplot(2,1,1); plot(maxima); title('maxima')  %dev
+%         subplot(2,1,2); plot(max_x); title('max_x')  %dev
+%         figure; subplot(2,1,1); plot(minima); title('minima')  %dev
+%         subplot(2,1,2); plot(min_x); title('min_x')  %dev
         
         c1 = 0;
         c2 = 0;
@@ -97,6 +106,11 @@ lw_inf = [14 37];
                 tmp_min_x(c2) = min_x(k);
             end
         end
+        
+%         figure; subplot(2,1,1); plot(tmp_max); title('tmp max')  %dev
+%         subplot(2,1,2); plot(tmp_max_x); title('tmp max x')  %dev
+%         figure; subplot(2,1,1); plot(tmp_min); title('tmp min')  %dev
+%         subplot(2,1,2); plot(tmp_min_x); title('tmp min x')  %dev
         
         % apagar máximos precedidos de mínimos cuja distância perfaz a
         % largura de uma letra
@@ -137,6 +151,12 @@ lw_inf = [14 37];
             end
         end
         
+%         figure; subplot(2,1,1); plot(maxima); title('decisive max');  %dev
+%         subplot(2,1,2); plot(max_x); title('decisive max x');  %dev
+%         
+%         figure; subplot(2,1,1); plot(minima); title('decisive min');  %dev
+%         subplot(2,1,2); plot(min_x); title('decisive min x');  %dev
+        
         % left
         if(max_x(1) < min_x(1)); left = max_x(1); else; left = min_x(1); end
         
@@ -152,14 +172,22 @@ lw_inf = [14 37];
         smoothed = imclose(smoothed, strel('line', 150, 0));
         smoothed = imgaussfilt(smoothed, 7);
 
+%         figure; imshow(smoothed); title('top/bottom')  %dev
+        
         sum_cols = zeros(1, size(smoothed,1));
 
         for k = 1:size(smoothed,1)
             sum_cols(k) = sum(smoothed(k,:));
         end
+        figure; plot(sum_cols); title('original sum lines');  %dev
+        figure; plot(diff(sum_cols)); title('original diff sum lines');  %dev
 
         [maxima, max_y] = findpeaks(diff(sum_cols));
         [minima, min_y] = findpeaks(diff(-sum_cols));
+        figure; subplot(2,1,1); plot(maxima); title('maxima')  %dev
+        subplot(2,1,2); plot(max_y); title('max y')  %dev
+        figure; subplot(2,1,1); plot(minima); title('minima')  %dev
+        subplot(2,1,2); plot(min_y); title('min y')  %dev
         
         c1 = 0;
         c2 = 0;
@@ -195,6 +223,11 @@ lw_inf = [14 37];
             end
         end
         
+%         figure; subplot(2,1,1); plot(tmp_max); title('tmp max')  %dev
+%         subplot(2,1,2); plot(tmp_max_y); title('tmp max y')  %dev
+%         figure; subplot(2,1,1); plot(tmp_min); title('tmp min')  %dev
+%         subplot(2,1,2); plot(tmp_min_y); title('tmp min y')  %dev
+        
         % top
         if(tmp_max_y(1) < tmp_min_y(1)); top = tmp_max_y(1); else; top = tmp_min_y(1); end
         
@@ -218,18 +251,14 @@ lw_inf = [14 37];
             end
         end
         
-%         car_cropped = imcrop(car, [left top right-left bottom-top]);
-%         car_cropped = imopen(car_cropped, strel('line', 20, 0));
-%         figure; imshow(car_cropped)   %dev
-%         title('before processing');   %dev
+        figure; imshow(car_cropped); title('car cropped');   %dev
 
         %% getting it nice and clean
 
         testcar = car_cropped;
         
         car_cropped = edge(testcar, 'Canny', 0.08, 0.7);
-        figure; imshow(car_cropped)
-        title('Canny 0.08 0.7');   %dev
+%         figure; imshow(car_cropped); title('Canny 0.08 0.7');   %dev
         
         for w = 1:size(car_cropped, 1)
             for v = 1:size(car_cropped, 2)
@@ -239,8 +268,8 @@ lw_inf = [14 37];
             end
         end
         
-        figure; imshow(car_cropped)   %dev
-        title('crop');   %dev
+%         figure; imshow(car_cropped)   %dev
+%         title('removed boundary lines');   %dev
         
         for w = 1:2
             if(w == 1)
@@ -250,21 +279,21 @@ lw_inf = [14 37];
             end
 
             [H, T, R] = hough(car_cropped, 'Theta', thetas);
-                figure; imshow(H,[],'XData',T,'YData',R);
-                xlabel('\theta'), ylabel('\rho');
-                axis on, axis normal, hold on;
+%                 figure; imshow(H,[],'XData',T,'YData',R);
+%                 xlabel('\theta'), ylabel('\rho');
+%                 axis on, axis normal, hold on;
             P = houghpeaks(H, 10);
             lines = houghlines(car_cropped, T, R, P, 'FillGap', 3, 'MinLength', 50);
 
-            figure, imshow(car_cropped), hold on
+%             figure, imshow(car_cropped), title('lines'), hold on
             max_len = 0;
             for k = 1:length(lines)
                xy = [lines(k).point1; lines(k).point2];
                plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
 
                % Plot beginnings and ends of lines
-               plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
-               plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+%                plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+%                plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
 
                % Determine the endpoints of the longest line segment
                len = norm(lines(k).point1 - lines(k).point2);
@@ -294,28 +323,28 @@ lw_inf = [14 37];
             lines = old_lines;
         end
         
-        figure; imshow(car_cropped); title('s/ lines'); %dev
+%         figure; imshow(car_cropped); title('w/o lines'); %dev
         
         car_cropped = bwmorph(car_cropped, 'thin');
-        figure; imshow(car_cropped); title('bwmorph - thin'); %dev
+%         figure; imshow(car_cropped); title('bwmorph - thin'); %dev
        
         car_cropped = imclose(car_cropped, strel('octagon', 18));
-        figure; imshow(car_cropped); title('close - octagon 18'); %dev
+%         figure; imshow(car_cropped); title('close - octagon 18'); %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-        figure; imshow(car_cropped); title('fill - holes'); %dev
+%         figure; imshow(car_cropped); title('fill - holes'); %dev
         
         car_cropped = imclose(car_cropped, strel('line', 30, 120));
-        figure; imshow(car_cropped); title('close - line 30 120'); %dev
+%         figure; imshow(car_cropped); title('close - line 30 120'); %dev
         
         car_cropped = imclose(car_cropped, strel('line', 30, 60));
-        figure; imshow(car_cropped); title('close - line 30 60'); %dev
+%         figure; imshow(car_cropped); title('close - line 30 60'); %dev
         
         car_cropped = imfill(car_cropped, 'holes');
-        figure; imshow(car_cropped); title('fill holes'); %dev
+%         figure; imshow(car_cropped); title('fill holes'); %dev
 
         car_cropped = imopen(car_cropped, strel('disk', 65));
-        figure; imshow(car_cropped); title('opendisk 65'); %dev
+%         figure; imshow(car_cropped); title('opendisk 65'); %dev
 
 
         %% Efficiency
@@ -329,4 +358,7 @@ lw_inf = [14 37];
 
 sim_values = similarity(similarity ~= 0);
 
-average_efficiency = mean(sim_values)
+average_efficiency = mean(sim_values);
+
+fprintf('\n\tEficiência mínima:  %2.2f%%\n\tEficiência máxima:  %2.2f%%\n\tEficiência média:   %2.2f%%\n', min(sim_values)*100, max(sim_values)*100, average_efficiency*100);
+
