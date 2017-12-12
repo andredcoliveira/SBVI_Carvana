@@ -48,7 +48,9 @@ for i = 1:size(cars,2)
     for j = 1:size(cars{i},2)
 
         car = cars{i}{j};
-            
+        
+        figure; imshow(cars{i}{j}); title('Original'); %dev
+        
         car_sides = imclose(car, strel('line', 120, 0));
         car_sides = imgaussfilt(car_sides, 1);
         
@@ -279,6 +281,7 @@ for i = 1:size(cars,2)
         car_cropped = imfill(car_cropped, 'holes');
         
         car_cropped = imclose(car_cropped, strel('line', 30, 120));
+        
         car_cropped = imclose(car_cropped, strel('line', 30, 60));
         
         car_cropped = imfill(car_cropped, 'holes');
