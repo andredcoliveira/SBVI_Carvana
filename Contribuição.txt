@@ -1,2 +1,0 @@
-Contribuição de cada elemento do grupo:
-	A contribuição valorativa dada para cada elemento do grupo foi de 1/3. A razão pela qual dividimos igualmente o peso da contribuição deve-se ao facto de todos os algoritmos implementados terem sido discutidos em conjunto e a sua construção foi feita com base nas opiniões de todos os elementos. Para além disso, o código em MATLAB da task 2 depende da 1 e a 3 depende da 2, sendo esta relação intrínseca à contribuição de todos os elementos em todos os códigos.
